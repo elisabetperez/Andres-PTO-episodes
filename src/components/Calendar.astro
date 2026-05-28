@@ -54,18 +54,29 @@ function buildMonth(ym: string) {
 }
 const monthData = months.map(buildMonth);
 
-// Initial month preference: month of initialSelected → today's month → last available.
-const initialYm =
-  (initialSelected && months.find((ym) => initialSelected.startsWith(ym))) ??
-  months.find((ym) => ym === todayYm) ??
-  months[months.length - 1];
+// Navigable dates: every clickable cell (filled or empty), sorted ASC.
+const navigable = monthData
+  .flatMap((mo) => mo.cells)
+  .filter((c): c is { date: string; status: "filled" | "empty"; isToday: boolean } =>
+    !!c.date && (c.status === "filled" || c.status === "empty"))
+  .map((c) => c.date);
+
+// Initial selected: the prop if provided AND navigable, else the last navigable.
+const initialSelectedSafe =
+  (initialSelected && navigable.includes(initialSelected) ? initialSelected : navigable[navigable.length - 1]) ?? "";
+
+const initialYm = initialSelectedSafe.slice(0, 7) || months[months.length - 1] || todayYm;
 ---
 
-<div class="c--calendar-a" data-initial-month={initialYm} data-initial-selected={initialSelected ?? ""}>
+<div
+  class="c--calendar-a"
+  data-initial-selected={initialSelectedSafe}
+  data-navigable={JSON.stringify(navigable)}
+>
   <div class="c--calendar-a__nav">
-    <button type="button" class="c--calendar-a__navbtn" data-dir="-1" aria-label="Mes anterior">←</button>
+    <button type="button" class="c--calendar-a__navbtn" data-dir="-1" aria-label="Día anterior">←</button>
     <h3 class="c--calendar-a__title" data-title-target></h3>
-    <button type="button" class="c--calendar-a__navbtn" data-dir="1" aria-label="Mes siguiente">→</button>
+    <button type="button" class="c--calendar-a__navbtn" data-dir="1" aria-label="Día siguiente">→</button>
   </div>
 
   {monthData.map((mo) => (
@@ -80,7 +91,7 @@ const initialYm =
             "c--calendar-a__cell",
             `is-${cell.status}`,
             cell.isToday ? "is-today" : "",
-            cell.date === initialSelected ? "is-selected" : "",
+            cell.date === initialSelectedSafe ? "is-selected" : "",
           ].filter(Boolean).join(" ");
           const day = Number(cell.date.slice(8));
           if (cell.status === "outside-season" || cell.status === "future") {
@@ -109,52 +120,69 @@ const initialYm =
     const titleEl = root.querySelector("[data-title-target]") as HTMLElement;
     const monthEls = Array.from(root.querySelectorAll<HTMLElement>("[data-month]"));
     const monthYms = monthEls.map((el) => el.dataset.month!);
-    let currentIdx = monthYms.indexOf(root.dataset.initialMonth!);
-    if (currentIdx < 0) currentIdx = 0;
+    const navigable: string[] = JSON.parse(root.dataset.navigable || "[]");
     const NAMES = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+    const prevBtn = root.querySelector('[data-dir="-1"]') as HTMLButtonElement;
+    const nextBtn = root.querySelector('[data-dir="1"]') as HTMLButtonElement;
 
-    function showMonth(idx: number) {
-      monthEls.forEach((el, i) => {
-        el.hidden = i !== idx;
-      });
-      const ym = monthYms[idx];
+    let selectedDate = root.dataset.initialSelected || navigable[navigable.length - 1] || "";
+
+    function findDayBtn(date: string): HTMLButtonElement | null {
+      return root.querySelector<HTMLButtonElement>(`[data-date="${date}"]`);
+    }
+
+    function showMonthOf(date: string) {
+      const ym = date.slice(0, 7);
+      monthEls.forEach((el) => { el.hidden = el.dataset.month !== ym; });
       const [y, m] = ym.split("-").map(Number);
       titleEl.textContent = `${NAMES[m - 1]} ${y}`;
-
-      const prev = root.querySelector('[data-dir="-1"]') as HTMLButtonElement;
-      const next = root.querySelector('[data-dir="1"]') as HTMLButtonElement;
-      prev.disabled = idx === 0;
-      next.disabled = idx === monthYms.length - 1;
     }
-    showMonth(currentIdx);
+
+    function updateNavVisibility() {
+      const idx = navigable.indexOf(selectedDate);
+      prevBtn.hidden = idx <= 0;
+      nextBtn.hidden = idx < 0 || idx >= navigable.length - 1;
+    }
+
+    function selectDate(date: string, opts: { emit?: boolean } = { emit: true }) {
+      selectedDate = date;
+      showMonthOf(date);
+      root.querySelectorAll(".is-selected").forEach((el) => el.classList.remove("is-selected"));
+      const btn = findDayBtn(date);
+      if (btn) {
+        btn.classList.add("is-selected");
+        if (opts.emit) {
+          root.dispatchEvent(new CustomEvent("calendar:select", {
+            bubbles: true,
+            detail: {
+              date,
+              status: btn.dataset.status!,
+              title: btn.dataset.title ?? "",
+              label: btn.dataset.label ?? "",
+            },
+          }));
+        }
+      }
+      updateNavVisibility();
+    }
+
+    // Initial paint — show the month, set nav visibility. No event emit (server already rendered).
+    if (selectedDate) selectDate(selectedDate, { emit: false });
 
     root.addEventListener("click", (e) => {
       const target = e.target as HTMLElement;
       const navBtn = target.closest<HTMLButtonElement>("[data-dir]");
-      if (navBtn && !navBtn.disabled) {
+      if (navBtn) {
         const dir = Number(navBtn.dataset.dir);
-        const next = Math.max(0, Math.min(monthYms.length - 1, currentIdx + dir));
-        if (next !== currentIdx) {
-          currentIdx = next;
-          showMonth(currentIdx);
+        const idx = navigable.indexOf(selectedDate);
+        const nextIdx = idx + dir;
+        if (nextIdx >= 0 && nextIdx < navigable.length) {
+          selectDate(navigable[nextIdx]);
         }
         return;
       }
-
       const dayBtn = target.closest<HTMLButtonElement>("[data-date]");
-      if (dayBtn) {
-        root.dispatchEvent(new CustomEvent("calendar:select", {
-          bubbles: true,
-          detail: {
-            date: dayBtn.dataset.date!,
-            status: dayBtn.dataset.status!,
-            title: dayBtn.dataset.title ?? "",
-            label: dayBtn.dataset.label ?? "",
-          },
-        }));
-        root.querySelectorAll(".is-selected").forEach((el) => el.classList.remove("is-selected"));
-        dayBtn.classList.add("is-selected");
-      }
+      if (dayBtn) selectDate(dayBtn.dataset.date!);
     });
   }
 </script>

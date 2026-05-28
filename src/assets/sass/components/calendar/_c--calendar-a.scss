@@ -23,16 +23,15 @@
     font-size: 0.875rem;
     cursor: pointer;
     color: $color-c;
-    transition: background 0.15s ease, color 0.15s ease, opacity 0.15s ease;
+    transition: background 0.15s ease, color 0.15s ease;
 
-    &:hover:not(:disabled) {
+    &:hover {
       background: $color-c;
       color: $color-a;
     }
 
-    &:disabled {
-      opacity: 0.25;
-      cursor: not-allowed;
+    &[hidden] {
+      display: none;
     }
   }
 
