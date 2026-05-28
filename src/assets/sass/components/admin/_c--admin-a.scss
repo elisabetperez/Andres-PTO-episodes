@@ -36,11 +36,12 @@
     font-family: $type-b;
     font-size: 1rem;
     color: $pto-fg;
-    background: rgba(212, 182, 188, 0.06);
+    background: #fff;
     border: 1px solid $pto-stroke;
     border-radius: 4px;
     padding: 0.6rem 0.75rem;
     width: 100%;
+    color-scheme: light;
     transition: border-color 0.15s ease, box-shadow 0.15s ease;
 
     &::placeholder {
@@ -50,12 +51,8 @@
     &:focus {
       outline: none;
       border-color: $pto-fg;
-      box-shadow: 0 0 0 3px rgba(212, 182, 188, 0.1);
+      box-shadow: 0 0 0 3px rgba(40, 24, 34, 0.1);
     }
-  }
-
-  &__input[type="date"] {
-    color-scheme: dark;
   }
 
   &__textarea {
