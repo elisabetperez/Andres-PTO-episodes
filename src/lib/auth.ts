@@ -1,7 +1,8 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 
 export type SessionPayload = {
-  exp: number; // epoch ms
+  exp: number;     // epoch ms
+  email?: string;  // sub identity (Google email)
 };
 
 function b64urlEncode(buf: Buffer | string): string {

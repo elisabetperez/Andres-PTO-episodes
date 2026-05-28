@@ -86,7 +86,7 @@ export const GET: APIRoute = async ({ url, cookies, redirect }) => {
   }
 
   // All checks passed — issue our session cookie.
-  const sessionToken = signSession({ exp: Date.now() + SESSION_TTL_MS }, sessionSecret);
+  const sessionToken = signSession({ exp: Date.now() + SESSION_TTL_MS, email }, sessionSecret);
   cookies.set("pto_session", sessionToken, {
     httpOnly: true,
     secure: !import.meta.env.DEV,

@@ -44,6 +44,22 @@ const latestDate = latest ? formatDateEs(latest.date) : "";
         <p class="c--ep-info-a__kicker" id="ep-kicker">{latest ? latestLabel : "Sin episodios"}</p>
         <h2 class="c--ep-info-a__title" id="ep-title">{latest ? latest.title : "Aún sin capítulos"}</h2>
         <p class="c--ep-info-a__date" id="ep-accent">{latestDate}</p>
+
+        <div class="c--reactions-a" id="reactions" data-date={latest?.date ?? ""}>
+          <div class="c--reactions-a__add">
+            <button type="button" id="reactions-toggle" aria-label="Añadir reacción">+</button>
+            <div class="c--reactions-a__picker" id="reactions-picker">
+              <button type="button" data-emoji="👍">👍</button>
+              <button type="button" data-emoji="❤️">❤️</button>
+              <button type="button" data-emoji="😂">😂</button>
+              <button type="button" data-emoji="🔥">🔥</button>
+              <button type="button" data-emoji="🎉">🎉</button>
+              <button type="button" data-emoji="🤯">🤯</button>
+              <button type="button" data-emoji="👀">👀</button>
+              <button type="button" data-emoji="🫡">🫡</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -69,6 +85,7 @@ const latestDate = latest ? formatDateEs(latest.date) : "";
     kicker.textContent = detail.label || "Cargando";
     title.textContent = detail.title || "";
     accent.textContent = formatDate(detail.date);
+    loadReactions(detail.date);
 
     try {
       const r = await fetch(`/api/episode?date=${encodeURIComponent(detail.date)}`);
@@ -92,4 +109,89 @@ const latestDate = latest ? formatDateEs(latest.date) : "";
       accent.textContent = "vuelve a intentarlo en un momento";
     }
   });
+
+  // -------- Reactions --------
+  const reactionsRoot = document.getElementById("reactions")!;
+  const picker = document.getElementById("reactions-picker")!;
+  const toggleBtn = document.getElementById("reactions-toggle")!;
+  let currentDate = reactionsRoot.dataset.date || "";
+  let myEmail = "";
+
+  type Reactions = Record<string, string[]>;
+
+  function nameOnly(email: string): string {
+    const at = email.indexOf("@");
+    return at >= 0 ? email.slice(0, at) : email;
+  }
+
+  function renderChips(reactions: Reactions) {
+    // Remove existing chips (everything except the __add wrapper).
+    reactionsRoot.querySelectorAll(".c--reactions-a__chip").forEach((c) => c.remove());
+    const add = reactionsRoot.querySelector(".c--reactions-a__add")!;
+    for (const [emoji, users] of Object.entries(reactions)) {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "c--reactions-a__chip";
+      if (myEmail && users.includes(myEmail)) btn.classList.add("is-mine");
+      btn.dataset.emoji = emoji;
+      btn.title = users.map(nameOnly).join(", ");
+      const e = document.createElement("span");
+      e.className = "c--reactions-a__chip__emoji";
+      e.textContent = emoji;
+      const c = document.createElement("span");
+      c.className = "c--reactions-a__chip__count";
+      c.textContent = String(users.length);
+      btn.append(e, c);
+      reactionsRoot.insertBefore(btn, add);
+    }
+  }
+
+  async function loadReactions(date: string) {
+    currentDate = date;
+    reactionsRoot.dataset.date = date;
+    picker.classList.remove("is-open");
+    if (!date) return renderChips({});
+    try {
+      const r = await fetch(`/api/reactions?date=${encodeURIComponent(date)}`);
+      if (!r.ok) throw new Error("fetch failed");
+      const data = await r.json() as { reactions: Reactions; me: string };
+      myEmail = data.me;
+      renderChips(data.reactions);
+    } catch {
+      renderChips({});
+    }
+  }
+
+  async function toggleReaction(emoji: string) {
+    if (!currentDate) return;
+    try {
+      const r = await fetch("/api/reactions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ date: currentDate, emoji }),
+      });
+      if (!r.ok) return;
+      const data = await r.json() as { reactions: Reactions; me: string };
+      myEmail = data.me;
+      renderChips(data.reactions);
+    } catch {/* silent */}
+  }
+
+  toggleBtn.addEventListener("click", () => picker.classList.toggle("is-open"));
+  picker.addEventListener("click", (e) => {
+    const b = (e.target as HTMLElement).closest<HTMLButtonElement>("[data-emoji]");
+    if (!b) return;
+    picker.classList.remove("is-open");
+    toggleReaction(b.dataset.emoji!);
+  });
+  reactionsRoot.addEventListener("click", (e) => {
+    const chip = (e.target as HTMLElement).closest<HTMLButtonElement>(".c--reactions-a__chip");
+    if (chip && chip.dataset.emoji) toggleReaction(chip.dataset.emoji);
+  });
+  // Close picker on outside click.
+  document.addEventListener("click", (e) => {
+    if (!reactionsRoot.contains(e.target as Node)) picker.classList.remove("is-open");
+  });
+
+  if (currentDate) loadReactions(currentDate);
 </script>
