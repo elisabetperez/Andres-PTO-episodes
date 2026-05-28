@@ -1,8 +1,12 @@
 // PTO-specific design tokens, layered on top of the portfolio framework.
-// (The framework vars get @import'ed first via astro.config.mjs.)
+// Paleta "Weekend": cream + reds + pastels.
 
-$pto-bg:       #f1f1f0;
-$pto-fg:       #111111;
-$pto-muted:    #8a8a8a;
-$pto-accent:   #e5482b; // bowie-ish red/orange
-$pto-stroke:   rgba(17, 17, 17, 0.16);
+$pto-bg:        #f3ead5;            // Weekend Cream
+$pto-fg:        #1a1816;            // warm near-black
+$pto-muted:     #8a7e6a;            // warm muted gray
+$pto-accent:    #8a282e;            // Weekend Red (acento principal)
+$pto-coral:     #c45d62;            // Coral Glow (acento secundario)
+$pto-blush:     #e7b4b4;            // Pink Blush
+$pto-lilac:     #e2d4ea;            // Lilac Haze
+$pto-peach:     #f5d2b8;            // Sunlit Peach
+$pto-stroke:    rgba(26, 24, 22, 0.18);
