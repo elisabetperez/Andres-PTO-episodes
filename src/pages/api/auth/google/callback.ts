@@ -75,7 +75,13 @@ export const GET: APIRoute = async ({ url, cookies, redirect }) => {
   if (info.email_verified !== "true" && info.email_verified !== true) {
     return htmlError("Tu email no está verificado en Google.", 403);
   }
-  if (!info.email || info.email.toLowerCase() !== allowed.toLowerCase()) {
+  const email = (info.email ?? "").toLowerCase();
+  const allowedLc = allowed.toLowerCase();
+  // ALLOWED_EMAIL puede ser un email completo ("foo@bar.com") o un dominio ("bar.com").
+  const ok = allowedLc.includes("@")
+    ? email === allowedLc
+    : email.endsWith(`@${allowedLc}`);
+  if (!email || !ok) {
     return htmlError(`Acceso denegado para ${info.email ?? "ese email"}.`, 403);
   }
 
@@ -89,5 +95,5 @@ export const GET: APIRoute = async ({ url, cookies, redirect }) => {
     maxAge: SESSION_TTL_MS / 1000,
   });
 
-  return redirect("/admin", 302);
+  return redirect("/", 302);
 };

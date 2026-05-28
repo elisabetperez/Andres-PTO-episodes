@@ -1,5 +1,6 @@
 ---
 import { SEASONS, isInAnySeason } from "@/config/seasons";
+import { episodeNumber } from "@/lib/numbering";
 
 type EpisodeInfo = { title: string; label: string };
 
@@ -10,6 +11,14 @@ type Props = {
 };
 
 const { episodes, today, initialSelected } = Astro.props;
+const allEntryDates = [...episodes.keys()];
+
+const THEMES = ["cream", "peach", "lilac", "blush", "coral", "red"] as const;
+function themeFor(date: string): string {
+  const n = episodeNumber(date, allEntryDates);
+  if (n === null) return "cream";
+  return THEMES[(n - 1) % THEMES.length];
+}
 
 const MONTHS_ES = [
   "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
@@ -105,6 +114,7 @@ const initialYm = initialSelectedSafe.slice(0, 7) || months[months.length - 1] |
               data-title={info?.title ?? "Sin episodio"}
               data-label={info?.label ?? ""}
               data-status={cell.status}
+              data-theme={themeFor(cell.date)}
             >{day}</button>
           );
         })}
@@ -153,6 +163,7 @@ const initialYm = initialSelectedSafe.slice(0, 7) || months[months.length - 1] |
               status: btn.dataset.status!,
               title: btn.dataset.title ?? "",
               label: btn.dataset.label ?? "",
+              theme: btn.dataset.theme ?? "cream",
             },
           }));
         }

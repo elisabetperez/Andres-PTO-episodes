@@ -1,11 +1,14 @@
 ---
 import "@/assets/sass/style.scss";
+import AuthGate from "@/components/AuthGate.astro";
+import { verifySession } from "@/lib/auth";
 
 type Props = {
   title?: string;
   description?: string;
   variant?: "default" | "hero";
   showFooter?: boolean;
+  initialTheme?: string;
 };
 
 const {
@@ -13,7 +16,12 @@ const {
   description = "El OOO de Andrés como capítulos de Friends.",
   variant = "default",
   showFooter = true,
+  initialTheme = "cream",
 } = Astro.props;
+
+const token = Astro.cookies.get("pto_session")?.value;
+const secret = import.meta.env.SESSION_SECRET;
+const isAuthed = !!(token && secret && verifySession(token, secret));
 ---
 
 <!doctype html>
@@ -25,16 +33,17 @@ const {
     <title>{title}</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   </head>
-  <body>
+  <body class:list={[!isAuthed && "is-gated"]} data-theme={initialTheme}>
     <main class:list={["c--page-a", variant === "hero" && "is-hero"]}>
       <div class="c--page-a__inner">
         <slot />
-        {showFooter && (
+        {showFooter && isAuthed && (
           <a class="c--tab-a" href="/admin">
             <span class="c--tab-a__label">Admin</span>
           </a>
         )}
       </div>
     </main>
+    {!isAuthed && <AuthGate />}
   </body>
 </html>

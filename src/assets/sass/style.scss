@@ -26,3 +26,18 @@
 @import "./components/sticker/c--sticker-a";
 @import "./components/tab/c--tab-a";
 @import "./components/episode-hero/c--episode-hero-a";
+@import "./components/auth-gate/c--auth-gate-a";
+
+// Per-day themes — switch the page background via body[data-theme].
+.c--page-a {
+  transition: background-color 0.45s ease;
+}
+body[data-theme="cream"] .c--page-a { background: $pto-bg; }
+body[data-theme="peach"] .c--page-a { background: $pto-peach; }
+body[data-theme="lilac"] .c--page-a { background: $pto-lilac; }
+body[data-theme="blush"] .c--page-a { background: $pto-blush; }
+body[data-theme="coral"] .c--page-a { background: $pto-coral; }
+body[data-theme="red"]   .c--page-a { background: $pto-accent; color: $pto-bg; }
+// On dark themes, dim the calendar's empty days for contrast.
+body[data-theme="coral"] .c--calendar-a__cell.is-empty,
+body[data-theme="red"]   .c--calendar-a__cell.is-empty { color: rgba(255, 245, 220, 0.7); }

@@ -1,0 +1,56 @@
+.c--auth-gate-a {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: $pto-blush;
+
+  &__panel {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: clamp(2rem, 4vw, 3rem) clamp(1.5rem, 4vw, 3.5rem);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    max-width: 36rem;
+    width: 100%;
+    box-shadow: none;
+  }
+
+  &__kicker {
+    font-family: $type-c;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: $pto-muted;
+    margin: 0;
+  }
+
+  &__subtitle {
+    font-family: $type-b;
+    font-size: 0.95rem;
+    color: $pto-muted;
+    margin: 0;
+
+    strong {
+      color: $pto-fg;
+      font-weight: 600;
+    }
+  }
+}
+
+// When the gate is on, prevent interaction with whatever is behind it.
+.is-gated {
+  overflow: hidden;
+
+  > main, > div, > section {
+    pointer-events: none;
+    user-select: none;
+  }
+}

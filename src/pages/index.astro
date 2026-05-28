@@ -73,8 +73,9 @@ const latestDate = latest ? formatDateEs(latest.date) : "";
   }
 
   document.addEventListener("calendar:select", async (e) => {
-    const detail = (e as CustomEvent).detail as { date: string; status: string; title: string; label: string };
+    const detail = (e as CustomEvent).detail as { date: string; status: string; title: string; label: string; theme: string };
     info.dataset.state = "loading";
+    if (detail.theme) document.body.dataset.theme = detail.theme;
     kicker.textContent = detail.label || "Cargando";
     title.textContent = detail.title || "";
     accent.textContent = formatDate(detail.date);
