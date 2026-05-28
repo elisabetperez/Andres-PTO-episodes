@@ -1,0 +1,8 @@
+// PTO-specific design tokens, layered on top of the portfolio framework.
+// (The framework vars get @import'ed first via astro.config.mjs.)
+
+$pto-bg:       #f1f1f0;
+$pto-fg:       #111111;
+$pto-muted:    #8a8a8a;
+$pto-accent:   #e5482b; // bowie-ish red/orange
+$pto-stroke:   rgba(17, 17, 17, 0.16);

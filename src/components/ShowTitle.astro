@@ -1,23 +1,19 @@
 ---
-// Title with Friends-style colored dots between words.
-// Renders e.g. "EL · PTO · DE · ANDRÉS" where each · is a colored dot.
+// Editorial-style title: roman uppercase line + italic accent line overlapping.
+// Inspired by display posters with mixed weight + color.
 
 type Props = {
-  text?: string;
   size?: "hero" | "medium";
+  /** Italic accent text drawn over the title in the accent color. */
+  accent?: string;
 };
-const { text = "EL PTO DE ANDRÉS", size = "hero" } = Astro.props;
-const words = text.toUpperCase().split(/\s+/);
-const dotColors = ["#e74c3c", "#f5d76e", "#3498db", "#2ecc71"];
+const { size = "hero", accent } = Astro.props;
 ---
 
-<h1 class={`c--show-title-a c--show-title-a--${size}`}>
-  {words.map((w, i) => (
-    <>
-      <span class="c--show-title-a__word">{w}</span>
-      {i < words.length - 1 && (
-        <span class="c--show-title-a__dot" style={`background:${dotColors[i % dotColors.length]}`} aria-hidden="true"></span>
-      )}
-    </>
-  ))}
-</h1>
+<div class={`c--show-title-a c--show-title-a--${size}`}>
+  <h1 class="c--show-title-a__main">
+    <span class="c--show-title-a__line">El PTO</span>
+    <span class="c--show-title-a__line">de Andrés</span>
+  </h1>
+  {accent && <span class="c--show-title-a__accent">{accent}</span>}
+</div>

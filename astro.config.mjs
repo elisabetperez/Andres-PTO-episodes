@@ -11,6 +11,7 @@ export default defineConfig({
           additionalData: `
             @import "src/assets/sass/framework/_vars/vars.scss";
             @import "src/assets/sass/framework/_mixins/mixins.scss";
+            @import "src/assets/sass/_pto-tokens.scss";
           `,
         },
       },

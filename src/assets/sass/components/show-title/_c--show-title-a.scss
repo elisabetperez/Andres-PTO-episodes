@@ -1,34 +1,45 @@
 .c--show-title-a {
+  position: relative;
+  display: inline-block;
+  text-align: center;
   font-family: $type-a;
-  font-weight: 700;
-  letter-spacing: 0.01em;
-  line-height: 1;
-  margin: 0;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 0;
+  color: $pto-fg;
 
-  &__word {
-    display: inline-block;
+  &__main {
+    font-weight: 600;
+    line-height: 0.95;
+    margin: 0;
+    display: grid;
+    gap: 0.05em;
+    letter-spacing: -0.01em;
   }
 
-  &__dot {
-    display: inline-block;
-    width: 0.32em;
-    height: 0.32em;
-    border-radius: 50%;
-    margin: 0 0.32em;
-    vertical-align: middle;
-    flex-shrink: 0;
+  &__line {
+    display: block;
+  }
+
+  &__accent {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $pto-accent;
+    font-style: italic;
+    font-weight: 500;
+    letter-spacing: 0;
+    pointer-events: none;
+    transform: translateY(0.15em) rotate(-2deg);
+    white-space: nowrap;
   }
 
   &--hero {
-    font-size: clamp(2.4rem, 8vw, 5.5rem);
+    .c--show-title-a__main { font-size: clamp(3rem, 9vw, 6rem); }
+    .c--show-title-a__accent { font-size: clamp(1.4rem, 3.5vw, 2.3rem); }
   }
 
   &--medium {
-    font-size: clamp(1.5rem, 4vw, 2.4rem);
+    .c--show-title-a__main { font-size: clamp(1.5rem, 3.5vw, 2.25rem); }
+    .c--show-title-a__accent { font-size: clamp(0.85rem, 1.5vw, 1.05rem); }
   }
 }

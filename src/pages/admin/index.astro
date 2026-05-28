@@ -17,10 +17,28 @@ const initialDate = allDates.includes(today) ? today : maxDate;
 
 {!isAuthed ? (
   <Layout title="Admin · El PTO de Andrés" variant="hero" showFooter={false}>
+    <div class="c--corner-a c--corner-a--tl">
+      <span class="c--corner-a__line">Terrahq</span>
+      <span class="c--corner-a__line">Sitcom diaria</span>
+      <span class="c--corner-a__line">Mayo · Junio</span>
+    </div>
+    <div class="c--corner-a c--corner-a--tr">
+      <span class="c--corner-a__line">Temporada 1</span>
+      <span class="c--corner-a__line c--corner-a__accent">Pilotos · 5 caps</span>
+      <span class="c--corner-a__line">2026</span>
+    </div>
+    <div class="c--corner-a c--corner-a--bl">
+      <span class="c--corner-a__line">®</span>
+    </div>
+    <div class="c--corner-a c--corner-a--br">
+      <span class="c--corner-a__line">May 25 — Jun 30</span>
+    </div>
+
     <div class="c--login-a">
-      <p class="c--login-a__kicker">Acceso restringido</p>
-      <ShowTitle text="El PTO de Andrés" size="hero" />
-      <p class="c--login-a__subtitle">Iniciar sesión para añadir o editar capítulos.</p>
+      <p class="c--login-a__topkicker">Amazing · Andrés<br/>No / Gender Collection</p>
+      <p class="c--login-a__year">2026</p>
+      <ShowTitle size="hero" accent="una sitcom diaria" />
+      <p class="c--login-a__year">2026</p>
       <a class="c--login-a__btn" href="/api/auth/google/start">
         <svg class="c--login-a__btn-icon" viewBox="0 0 24 24" aria-hidden="true">
           <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -30,7 +48,6 @@ const initialDate = allDates.includes(today) ? today : maxDate;
         </svg>
         Iniciar sesión con Google
       </a>
-      <p class="c--login-a__hint">Solo el admin de la sitcom puede entrar.</p>
     </div>
   </Layout>
 ) : (
