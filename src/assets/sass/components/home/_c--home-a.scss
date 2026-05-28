@@ -34,7 +34,7 @@
     align-items: center;
     gap: clamp(2rem, 6vw, 4rem);
     width: 100%;
-    max-width: 60rem;
+    max-width: 76rem;
 
     @media all and ($viewport-type: $tablets) {
       grid-template-columns: 1fr;
