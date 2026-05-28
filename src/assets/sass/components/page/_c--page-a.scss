@@ -7,13 +7,7 @@
 .c--page-a {
   font-family: $type-b;
   color: $pto-fg;
-  background:
-    radial-gradient(120% 80% at 10% 0%, rgba(245, 210, 184, 0.4), transparent 60%),
-    radial-gradient(120% 80% at 90% 100%, rgba(90, 42, 48, 0.18), transparent 60%),
-    linear-gradient(135deg, #ecbcc0 0%, #e7b4b4 35%, #dba6a8 65%, #efc0c0 100%);
-  background-size: 200% 200%, 200% 200%, 240% 240%;
-  background-position: 0% 50%, 100% 50%, 0% 50%;
-  animation: pto-page-drift 22s ease-in-out infinite;
+  background: #ffffff;
   min-height: 100vh;
   min-height: 100svh;
   display: flex;
