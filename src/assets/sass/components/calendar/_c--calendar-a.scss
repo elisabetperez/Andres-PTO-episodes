@@ -2,7 +2,7 @@
   display: grid;
   gap: 0.75rem;
   width: 100%;
-  max-width: 48rem;
+  max-width: 64rem;
 
   &__nav {
     display: flex;
@@ -37,7 +37,7 @@
 
   &__title {
     font-family: $type-a;
-    font-size: 1.1rem;
+    font-size: 1.6rem;
     margin: 0;
     font-weight: 600;
     text-align: center;
@@ -63,7 +63,7 @@
   &__grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 4px;
+    gap: 8px;
   }
 
   &__cell {
@@ -75,7 +75,7 @@
     color: $color-c;
     border: 1px solid transparent;
     font-family: $type-b;
-    font-size: 1.4rem;
+    font-size: 1.8rem;
     border-radius: 50%;
     background: transparent;
     cursor: pointer;
