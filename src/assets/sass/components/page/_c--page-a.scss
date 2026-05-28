@@ -24,10 +24,10 @@
     flex-direction: column;
 
     @media all and ($viewport-type: $tablets) {
-      padding: 4.5rem 1.25rem 4.5rem; // headroom for sticker corner + admin tab
+      padding: 2rem 1.25rem 4.5rem; // top can be smaller without the sticker; bottom keeps admin-tab headroom
     }
     @media all and ($viewport-type: $mobile) {
-      padding: 4rem 1rem 4rem;
+      padding: 1.5rem 1rem 4rem;
     }
   }
 

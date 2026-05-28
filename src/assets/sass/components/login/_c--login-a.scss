@@ -87,8 +87,7 @@
   &--no-pad {
     padding: 1rem;
     pointer-events: auto;
-    // The sticker corner stays visible on mobile (other corners hide).
-    @media all and ($viewport-type: $tablets) { display: block; padding: 0.5rem; }
+    // Sticker hidden on tablet/mobile (inherits display: none from c--corner-a).
   }
 
   &__line { display: block; }
