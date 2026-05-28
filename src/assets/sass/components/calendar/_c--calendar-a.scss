@@ -130,15 +130,15 @@
 
     &.is-outside-season,
     &.is-future {
-      color: $pto-muted;
-      opacity: 0.35;
+      color: $pto-accent;
+      opacity: 0.55;
       pointer-events: none;
       cursor: default;
     }
 
     &.is-empty {
-      color: $pto-fg;
-      font-weight: 300;
+      color: $pto-accent;
+      font-weight: 400;
 
       &:hover {
         background: rgba(40, 24, 34, 0.06);
