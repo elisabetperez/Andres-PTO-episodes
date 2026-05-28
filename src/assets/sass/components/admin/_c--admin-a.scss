@@ -1,0 +1,104 @@
+.c--admin-a {
+  max-width: 36rem;
+
+  &__form {
+    display: grid;
+    gap: 1.25rem;
+    margin-top: 1rem;
+  }
+
+  &__field {
+    display: grid;
+    gap: 0.35rem;
+
+    span {
+      font-family: $type-c;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: $color-d;
+    }
+
+    small {
+      font-family: $type-c;
+      font-size: 0.7rem;
+      color: $color-d;
+      margin-left: 0.5rem;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+  }
+
+  &__input,
+  &__select,
+  &__textarea {
+    font-family: $type-b;
+    font-size: 1rem;
+    color: $color-c;
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.18);
+    border-radius: 4px;
+    padding: 0.6rem 0.75rem;
+    width: 100%;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+    &:focus {
+      outline: none;
+      border-color: $color-c;
+      box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.06);
+    }
+  }
+
+  &__textarea {
+    resize: vertical;
+    min-height: 5rem;
+    line-height: 1.4;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  &__btn {
+    appearance: none;
+    font-family: $type-b;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: $color-a;
+    background: $color-c;
+    border: none;
+    border-radius: 999px;
+    padding: 0.6rem 1.4rem;
+    cursor: pointer;
+    transition: opacity 0.15s ease;
+
+    &:hover { opacity: 0.85; }
+
+    &.is-ghost {
+      background: transparent;
+      color: $color-c;
+      border: 1px solid $color-c;
+    }
+  }
+
+  &__status {
+    margin: 0;
+    font-family: $type-c;
+    font-size: 0.85rem;
+    min-height: 1.2em;
+
+    &.is-error { color: #c00; }
+    &.is-ok    { color: #1a7f37; }
+  }
+
+  &__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+}

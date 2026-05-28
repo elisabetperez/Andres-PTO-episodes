@@ -7,44 +7,49 @@ const token = Astro.cookies.get("pto_session")?.value;
 const secret = import.meta.env.SESSION_SECRET;
 const isAuthed = !!(token && secret && verifySession(token, secret));
 
-const allDates = SEASONS.flatMap((s) => daysInSeason(s.id));
+const allDates = isAuthed ? SEASONS.flatMap((s) => daysInSeason(s.id)) : [];
 ---
 
 <Layout title="Admin · El PTO de Andrés">
-  <h1 class="c--page-a__title">Admin</h1>
+  <div class="c--admin-a">
+    <div class="c--admin-a__top">
+      <h1 class="c--page-a__title">Admin</h1>
+      <a class="c--admin-a__btn is-ghost" href="/">← Volver</a>
+    </div>
 
     {!isAuthed ? (
-      <form id="login-form">
-        <label>
-          Contraseña
-          <input type="password" name="password" required autofocus />
+      <form id="login-form" class="c--admin-a__form">
+        <label class="c--admin-a__field">
+          <span>Contraseña</span>
+          <input class="c--admin-a__input" type="password" name="password" required autofocus />
         </label>
-        <button type="submit">Entrar</button>
-        <p id="login-error" role="alert" style="color:#c00;"></p>
+        <div class="c--admin-a__actions">
+          <button class="c--admin-a__btn" type="submit">Entrar</button>
+          <p id="login-error" class="c--admin-a__status is-error" role="alert"></p>
+        </div>
       </form>
     ) : (
       <>
-        <form id="logout-form" style="margin-bottom:1.5rem;">
-          <button type="submit">Cerrar sesión</button>
-        </form>
-
-        <form id="episode-form">
-          <label>
-            Fecha
-            <select name="date" required>
+        <form id="episode-form" class="c--admin-a__form">
+          <label class="c--admin-a__field">
+            <span>Fecha</span>
+            <select class="c--admin-a__select" name="date" required>
               {allDates.map((d) => <option value={d}>{d}</option>)}
             </select>
           </label>
-          <label>
-            Título
-            <input type="text" name="title" required maxlength="200" placeholder="🏖️ El que..." />
+          <label class="c--admin-a__field">
+            <span>Título</span>
+            <input class="c--admin-a__input" type="text" name="title" required maxlength="200" placeholder="🏖️ El que..." />
           </label>
-          <label>
-            Resumen <small id="word-count">(0/15 palabras)</small>
-            <textarea name="summary" required rows="3" maxlength="400"></textarea>
+          <label class="c--admin-a__field">
+            <span>Resumen <small id="word-count">(0/15 palabras · opcional)</small></span>
+            <textarea class="c--admin-a__textarea" name="summary" rows="3" maxlength="400"></textarea>
           </label>
-          <button type="submit">Guardar</button>
-          <p id="episode-status" role="status"></p>
+          <div class="c--admin-a__actions">
+            <button class="c--admin-a__btn" type="submit">Guardar</button>
+            <button class="c--admin-a__btn is-ghost" type="button" id="logout-btn">Cerrar sesión</button>
+            <p id="episode-status" class="c--admin-a__status" role="status"></p>
+          </div>
         </form>
 
         <script>
@@ -59,34 +64,38 @@ const allDates = SEASONS.flatMap((s) => daysInSeason(s.id));
             const t = s.trim();
             return t ? t.split(/\s+/).length : 0;
           }
-          summary.addEventListener("input", () => {
+          function refreshCount() {
             const n = wc(summary.value);
-            count.textContent = `(${n}/15 palabras)`;
-            count.style.color = n > 15 ? "#c00" : "";
-          });
+            count.textContent = `(${n}/15 palabras · opcional)`;
+            (count as HTMLElement).style.color = n > 15 ? "#c00" : "";
+          }
+          summary.addEventListener("input", refreshCount);
 
-          // Prefill if there is already an episode for the selected date.
           async function loadExisting() {
-            const r = await fetch(`/api/episode?date=${encodeURIComponent(dateSel.value)}`);
-            if (!r.ok) return;
-            const data = await r.json();
-            if (data.episode) {
-              titleInput.value = data.episode.title;
-              summary.value = data.episode.summary;
-              summary.dispatchEvent(new Event("input"));
-            } else {
+            try {
+              const r = await fetch(`/api/episode?date=${encodeURIComponent(dateSel.value)}`);
+              if (!r.ok) throw new Error("fetch failed");
+              const data = await r.json();
+              if (data.episode) {
+                titleInput.value = data.episode.title ?? "";
+                summary.value = data.episode.summary ?? "";
+              } else {
+                titleInput.value = "";
+                summary.value = "";
+              }
+            } catch {
               titleInput.value = "";
               summary.value = "";
-              count.textContent = "(0/15 palabras)";
             }
+            refreshCount();
           }
           dateSel.addEventListener("change", loadExisting);
           loadExisting();
 
           form.addEventListener("submit", async (e) => {
             e.preventDefault();
+            status.className = "c--admin-a__status";
             status.textContent = "Guardando...";
-            status.style.color = "";
             const body = {
               date: dateSel.value,
               title: titleInput.value,
@@ -99,17 +108,15 @@ const allDates = SEASONS.flatMap((s) => daysInSeason(s.id));
             });
             const data = await r.json();
             if (r.ok) {
+              status.className = "c--admin-a__status is-ok";
               status.textContent = "Guardado ✓";
-              status.style.color = "green";
             } else {
+              status.className = "c--admin-a__status is-error";
               status.textContent = data.error ?? "Error";
-              status.style.color = "#c00";
             }
           });
 
-          const logout = document.getElementById("logout-form") as HTMLFormElement;
-          logout.addEventListener("submit", async (e) => {
-            e.preventDefault();
+          document.getElementById("logout-btn")!.addEventListener("click", async () => {
             await fetch("/api/logout", { method: "POST" });
             location.reload();
           });
@@ -139,4 +146,5 @@ const allDates = SEASONS.flatMap((s) => daysInSeason(s.id));
         });
       </script>
     )}
+  </div>
 </Layout>

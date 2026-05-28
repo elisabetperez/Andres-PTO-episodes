@@ -37,4 +37,23 @@
     margin: 0;
     font-size: 1rem;
   }
+
+  &__footer {
+    margin-top: 4rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    font-family: $type-c;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+
+    a {
+      color: $color-d;
+      text-decoration: none;
+
+      &:hover {
+        color: $color-c;
+      }
+    }
+  }
 }
