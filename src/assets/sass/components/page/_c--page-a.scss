@@ -1,7 +1,19 @@
+@keyframes pto-page-drift {
+  0%   { background-position:   0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position:   0% 50%; }
+}
+
 .c--page-a {
   font-family: $type-b;
   color: $pto-fg;
-  background: $pto-bg;
+  background:
+    radial-gradient(120% 80% at 10% 0%, rgba(200, 144, 152, 0.18), transparent 60%),
+    radial-gradient(120% 80% at 90% 100%, rgba(143, 70, 90, 0.22), transparent 60%),
+    linear-gradient(135deg, #2a1a24 0%, #281822 35%, #20121b 65%, #2c1a22 100%);
+  background-size: 200% 200%, 200% 200%, 240% 240%;
+  background-position: 0% 50%, 100% 50%, 0% 50%;
+  animation: pto-page-drift 22s ease-in-out infinite;
   min-height: 100vh;
   min-height: 100svh;
   display: flex;
