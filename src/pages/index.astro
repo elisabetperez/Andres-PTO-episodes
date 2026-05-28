@@ -1,41 +1,25 @@
 ---
 import Layout from "@/components/Layout.astro";
-import { SEASONS } from "@/config/seasons";
+import Calendar from "@/components/Calendar.astro";
 import { listEpisodes } from "@/lib/episodes";
 
 let episodes: Awaited<ReturnType<typeof listEpisodes>> = [];
 try {
   episodes = await listEpisodes();
 } catch (err) {
-  console.error("Could not list episodes (likely Blobs not configured locally):", err);
+  console.error("Could not list episodes:", err);
 }
+const today = new Date().toISOString().slice(0, 10);
+const episodeDates = episodes.map((e) => e.date);
 ---
 
 <Layout>
   <section class="o--section">
-    <h1>El PTO de Andrés</h1>
-    <p>Una sitcom diaria, en formato calendario.</p>
+    <header>
+      <h1>El PTO de Andrés</h1>
+      <p>Una sitcom diaria, en formato calendario.</p>
+    </header>
 
-    <h2>Temporadas</h2>
-    <ul>
-      {SEASONS.map((s) => (
-        <li>
-          <strong>{s.label}</strong> — {s.start} a {s.end}
-        </li>
-      ))}
-    </ul>
-
-    <h2>Episodios registrados</h2>
-    {episodes.length === 0 ? (
-      <p>Sin episodios todavía.</p>
-    ) : (
-      <ul>
-        {episodes.map((e) => (
-          <li>
-            <a href={`/e/${e.date}`}>{e.date} — {e.title}</a>
-          </li>
-        ))}
-      </ul>
-    )}
+    <Calendar episodeDates={episodeDates} today={today} />
   </section>
 </Layout>

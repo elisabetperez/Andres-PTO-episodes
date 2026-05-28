@@ -1,0 +1,62 @@
+.c--calendar-a {
+  display: grid;
+  gap: 2rem;
+
+  &__title {
+    font-family: $type-a;
+    font-size: 1.25rem;
+    margin: 0 0 0.5rem;
+  }
+
+  &__dow {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    font-family: $type-c;
+    font-size: 0.75rem;
+    color: $color-d;
+    margin-bottom: 0.25rem;
+    text-align: center;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+  }
+
+  &__cell {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: $color-c;
+    border: 1px solid transparent;
+    font-family: $type-b;
+    font-size: 0.875rem;
+
+    &.is-blank {
+      visibility: hidden;
+    }
+
+    &.is-outside-season {
+      color: $color-d;
+      opacity: 0.4;
+      pointer-events: none;
+    }
+
+    &.is-empty {
+      background: rgba(0, 0, 0, 0.04);
+    }
+
+    &.is-filled {
+      background: $color-b;
+      font-weight: 600;
+    }
+
+    &.is-today {
+      border-color: $color-c;
+      font-weight: 700;
+    }
+  }
+}
