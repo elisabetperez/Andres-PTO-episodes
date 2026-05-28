@@ -1,0 +1,19 @@
+.c--arrow-a {
+  font-family: $type-c;
+  font-style: normal;
+  font-weight: 400;
+  color: map-get($color-options, b);
+  font-size: 0.65em;
+  letter-spacing: 0;
+  margin-left: 0.35em;
+  vertical-align: 0.15em;
+  display: inline-block;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: transform $time-a $ease-out-quart;
+}
+
+a:hover .c--arrow-a,
+a:focus-visible .c--arrow-a {
+  transform: translateX(3px);
+}

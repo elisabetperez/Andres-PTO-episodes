@@ -1,0 +1,61 @@
+.c--footer-a {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100svh;
+  padding: calc(#{$headerDesktop} + 2rem) 6vw 4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 2.5rem;
+
+  @media all and ($viewport-type: $tablets) {
+    padding: calc(#{$headerTablets} + 1rem) 1.25rem 3rem;
+    min-height: 100vh;
+    min-height: 100svh;
+    gap: 2rem;
+  }
+
+  &__smiley {
+    // anchored to flex-start (left) by parent align-items
+  }
+
+  &__body {
+    width: 100%;
+    max-width: 60rem;
+  }
+
+  &__text {
+    @include make-font-c();
+    color: map-get($color-options, c);
+  }
+
+  &__year {
+    font-family: $type-a;
+    font-style: italic;
+    font-weight: 400;
+    color: map-get($color-options, c);
+    position: absolute;
+    bottom: -1rem;
+    right: -1.25rem;
+    font-size: 6rem;
+    line-height: 0.9;
+    pointer-events: none;
+    user-select: none;
+    white-space: nowrap;
+
+    @media all and ($viewport-type: $tabletm) {
+      font-size: 5rem;
+      right: -1rem;
+    }
+    @media all and ($viewport-type: $tablets) {
+      font-size: 3.75rem;
+      right: -0.5rem;
+      bottom: -0.75rem;
+    }
+    @media all and ($viewport-type: $mobile) {
+      font-size: 3rem;
+    }
+  }
+}

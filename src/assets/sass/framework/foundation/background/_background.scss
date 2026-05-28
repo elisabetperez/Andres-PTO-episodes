@@ -1,0 +1,5 @@
+@each $key, $value in $colorbg-options {
+  .f--bg-#{$key} {
+    background-color: $value;
+  }
+}

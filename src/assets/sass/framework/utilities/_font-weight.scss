@@ -1,0 +1,14 @@
+$font-weight-values: (300, 400, 500, 600, 700);
+
+@each $value in $font-weight-values {
+  .f--fw-#{$value} {
+    font-weight: $value;
+  }
+}
+
+.f--fs-italic {
+  font-style: italic;
+}
+.f--fs-normal {
+  font-style: normal;
+}

@@ -1,0 +1,40 @@
+@mixin build-columns($size, $bkpt) {
+  @for $i from 1 through $columns {
+    @if ($size == 'all') {
+      .f--col-#{$i} {
+        @include make-col($i);
+      }
+    } @else {
+      .f--col-#{$size}-#{$i} {
+        @media all and ($viewport-type: #{$bkpt}) {
+          $value: 0.6944444444444% * ($columns * $i);
+          flex: 0 0 $value;
+          max-width: $value;
+          transition: $time-a;
+        }
+      }
+    }
+  }
+}
+@each $size, $bkpt in $viewport-layouts {
+  @include build-columns($size, $bkpt);
+}
+
+@mixin build-offset($size, $bkpt) {
+  @for $i from 0 through $columns {
+    @if ($size == 'all') {
+      .f--offset-#{$i} {
+        @include make-offset($i);
+      }
+    } @else {
+      .f--offset-#{$size}-#{$i} {
+        @media all and ($viewport-type: #{$bkpt}) {
+          @include make-offset($i);
+        }
+      }
+    }
+  }
+}
+@each $size, $bkpt in $viewport-layouts {
+  @include build-offset($size, $bkpt);
+}

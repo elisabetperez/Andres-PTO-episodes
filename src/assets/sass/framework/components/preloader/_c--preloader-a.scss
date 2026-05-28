@@ -1,0 +1,64 @@
+.c--preloader-a {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: map-get($color-options, a);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: opacity 0.55s ease-out;
+
+  &__bg {
+    position: absolute;
+    inset: -8%;
+    background: conic-gradient(
+      from 0deg at 50% 50%,
+      #EDAADA 0%, #FAFAFA 25%, #C8C8C8 50%, #FAFAFA 75%, #EDAADA 100%
+    );
+    filter: blur(140px);
+    animation: c--tile-a-rotate 22s linear infinite;
+    opacity: 0.5;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  &__counter {
+    position: relative;
+    z-index: 1;
+    font-family: $type-a;
+    font-style: italic;
+    font-weight: 400;
+    line-height: 0.9;
+    color: map-get($color-options, c);
+    letter-spacing: -0.04em;
+    display: inline-flex;
+    align-items: flex-start;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+  }
+
+  &__num {
+    display: inline-block;
+    min-width: 3.4ch;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__pct {
+    color: map-get($color-options, b);
+    font-size: 0.32em;
+    margin-left: 0.1em;
+    margin-top: 0.6em;
+  }
+
+  &--is-leaving {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  &--is-hidden { display: none; }
+}
+
+body.is-loading {
+  overflow: hidden;
+}

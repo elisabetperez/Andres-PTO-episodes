@@ -1,0 +1,82 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+html {
+  font-size: $font-body-size;
+  scroll-behavior: smooth;
+  overflow-x: clip;
+
+  // Hide native scrollbar (Lenis handles smooth scroll, top progress bar shows position)
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+body {
+  background: map-get($color-options, a);
+  font-family: $type-b;
+  font-size: $font-body-size;
+  font-weight: 400;
+  line-height: $line-height;
+  color: map-get($color-options, c);
+  overscroll-behavior: none;
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*:focus {
+  outline: 0;
+}
+
+*:focus-visible {
+  outline: 2px solid map-get($color-options, b);
+  outline-offset: 2px;
+}
+
+b,
+strong {
+  font-weight: 600;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font: inherit;
+  background: transparent;
+  cursor: pointer;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

@@ -1,0 +1,26 @@
+@mixin make-section-a() {
+  position: relative;
+  padding: 8rem 0;
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  @media all and ($viewport-type: $tabletm) {
+    padding: 6rem 0;
+  }
+  @media all and ($viewport-type: $tablets) {
+    padding: 4rem 0;
+    min-height: auto;
+  }
+}
+
+@mixin make-section-a-label() {
+  @include make-font-e();
+  color: map-get($color-options, d);
+  margin-bottom: 3rem;
+
+  @media all and ($viewport-type: $tablets) {
+    margin-bottom: 2rem;
+  }
+}

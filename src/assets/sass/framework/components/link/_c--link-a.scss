@@ -1,0 +1,22 @@
+.c--link-a {
+  @include make-link-a();
+  @include make-link-a-color(c);
+
+  &:hover,
+  &:focus-visible {
+    @include make-link-a-interaction();
+  }
+
+  &--accent {
+    @include make-link-a-color(b);
+
+    &:hover,
+    &:focus-visible {
+      @include make-link-a-interaction();
+    }
+  }
+
+  &--strikethrough {
+    @include make-link-a-strikethrough();
+  }
+}

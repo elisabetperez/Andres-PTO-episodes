@@ -1,0 +1,37 @@
+@mixin make-ar-a($size) {
+  position: relative;
+  width: 100%;
+  padding-top: #{$size};
+  overflow: hidden;
+}
+@mixin make-ar-a-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+@mixin make-ar-a-item__img {
+  @include make-ar-a-item();
+  object-fit: contain;
+  object-position: center;
+}
+
+@mixin make-ar-b($size) {
+  position: relative;
+  width: 100%;
+  padding-top: #{$size};
+  overflow: hidden;
+}
+@mixin make-ar-b-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+@mixin make-ar-b-item__img {
+  @include make-ar-b-item();
+  object-fit: cover;
+  object-position: center;
+}

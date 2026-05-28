@@ -1,0 +1,51 @@
+.c--cursor-a {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: map-get($color-options, b);
+  mix-blend-mode: difference;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s $ease-out-quart, height 0.3s $ease-out-quart, background 0.2s, color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: map-get($color-options, a);
+  font-family: $type-c;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  overflow: hidden;
+  white-space: nowrap;
+  opacity: 0;
+  will-change: transform;
+
+  &--is-visible { opacity: 1; }
+
+  &--is-hover {
+    width: 110px;
+    height: 110px;
+    background: map-get($color-options, b);
+    mix-blend-mode: normal;
+    color: map-get($color-options, c);
+  }
+}
+
+@media (hover: none) {
+  .c--cursor-a { display: none; }
+}
+
+// Hide native cursor on hover-capable desktop
+@media (hover: hover) and (min-width: 811px) {
+  body.cursor-custom-active,
+  body.cursor-custom-active a,
+  body.cursor-custom-active button,
+  body.cursor-custom-active [data-cursor] {
+    cursor: none;
+  }
+}

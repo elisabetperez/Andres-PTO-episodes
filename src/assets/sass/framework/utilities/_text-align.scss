@@ -1,0 +1,20 @@
+$text-align-values: (left, center, right);
+
+@mixin build-text-align($size, $bkpt) {
+  @each $value in $text-align-values {
+    @if ($size == 'all') {
+      .f--ta-#{$value} {
+        text-align: $value;
+      }
+    } @else {
+      .f--ta-#{$size}-#{$value} {
+        @media all and ($viewport-type: #{$bkpt}) {
+          text-align: $value;
+        }
+      }
+    }
+  }
+}
+@each $size, $bkpt in $breakpoints-grid {
+  @include build-text-align($size, $bkpt);
+}

@@ -1,0 +1,243 @@
+.c--hero-a {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100svh;
+  padding: 0;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -8%;
+    background: conic-gradient(
+      from 0deg at var(--hero-bg-x, 50%) var(--hero-bg-y, 50%),
+      #EDAADA 0%, #FAFAFA 25%, #C8C8C8 50%, #FAFAFA 75%, #EDAADA 100%
+    );
+    filter: blur(140px);
+    animation: c--tile-a-rotate 22s linear infinite;
+    opacity: 0.5;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  // Pink spotlight that follows the cursor — emphasizes the brand color
+  // where you're looking
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      circle 35vw at var(--hero-bg-x, 50%) var(--hero-bg-y, 50%),
+      rgba(237, 170, 218, 0.85),
+      rgba(237, 170, 218, 0) 60%
+    );
+    filter: blur(40px);
+    pointer-events: none;
+    z-index: 0;
+    mix-blend-mode: multiply;
+  }
+
+  > * { z-index: 1; }
+
+  @media all and ($viewport-type: $tablets) {
+    padding: calc(#{$headerTablets} + 1rem) 1.25rem 5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100vh;
+    min-height: 100svh;
+  }
+
+  &__logo {
+    position: absolute;
+    top: calc(#{$headerDesktop} + 1rem);
+    left: 6vw;
+    width: 88px;
+    height: 88px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    @media all and ($viewport-type: $tablets) {
+      position: static;
+      width: 64px;
+      height: 64px;
+      margin-bottom: 2.5rem;
+    }
+  }
+
+  &__logo-letter {
+    font-family: $type-a;
+    font-style: italic;
+    font-size: 2.5rem;
+    color: map-get($color-options, c);
+    line-height: 1;
+    position: relative;
+    z-index: 1;
+
+    @media all and ($viewport-type: $tablets) {
+      font-size: 1.85rem;
+    }
+  }
+
+  &__logo-shape {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  &__title {
+    position: absolute;
+    top: 28%;
+    left: 6vw;
+    margin: 0;
+    color: map-get($color-options, c);
+    font-family: $type-a;
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: -0.025em;
+    line-height: 0.95;
+    white-space: nowrap;
+    pointer-events: none;
+
+    font-size: clamp(2.75rem, 6.5vw, 6rem);
+
+    @media all and ($viewport-type: $tablets) {
+      position: static;
+      white-space: normal;
+      font-size: clamp(2.25rem, 8vw, 3.75rem);
+      pointer-events: auto;
+    }
+  }
+
+  &__title-line {
+    display: block;
+
+    &--bold {
+      font-weight: 600;
+    }
+  }
+
+  &__char-wrap {
+    display: inline-block;
+    overflow: hidden;
+    line-height: inherit;
+    vertical-align: top;
+  }
+
+  &__char {
+    display: inline-block;
+    white-space: pre;
+  }
+
+  &__marquee {
+    position: absolute;
+    bottom: 5rem;
+    left: 0;
+    right: 0;
+    width: 100%;
+    overflow: hidden;
+    padding: 1rem 0;
+    pointer-events: none;
+
+    @media all and ($viewport-type: $tablets) {
+      position: static;
+      margin-top: 3rem;
+    }
+  }
+
+  &__marquee-track {
+    display: flex;
+    white-space: nowrap;
+    animation: c--hero-a-marquee 80s linear infinite;
+    width: max-content;
+  }
+
+  &__marquee-text {
+    display: inline-flex;
+    align-items: center;
+    gap: 1.5em;
+    padding-right: 1.5em;
+    font-family: $type-a;
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(1rem, 1.6vw, 1.4rem);
+    line-height: 1;
+    color: map-get($color-options, c);
+    flex-shrink: 0;
+  }
+
+  &__marquee-word {
+    flex-shrink: 0;
+  }
+
+  &__marquee-star {
+    color: map-get($color-options, b);
+    font-size: 0.85em;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+
+  @keyframes c--hero-a-marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  &__rotator {
+    position: relative;
+    display: inline-block;
+    color: map-get($color-options, b);
+    font-family: $type-a;
+    font-style: italic;
+    text-decoration: underline;
+    text-decoration-color: map-get($color-options, b);
+    text-underline-offset: 0.18em;
+    text-decoration-thickness: 1px;
+    transition: color $time-a $ease-out-quart;
+
+    &:hover,
+    &:focus-visible {
+      color: map-get($color-options, c);
+      text-decoration-color: map-get($color-options, c);
+    }
+  }
+
+  &__rotator-text {
+    display: inline-block;
+    transition: opacity $time-a $ease-out-quart, transform $time-a $ease-out-quart;
+
+    &--is-out {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+  }
+
+  &__quien {
+    position: absolute;
+    left: 6vw;
+    bottom: 5rem;
+    color: map-get($color-options, c);
+    font-family: $type-a;
+    font-style: italic;
+    font-size: 1.25rem;
+    text-decoration: underline;
+    text-decoration-color: map-get($color-options, b);
+    text-underline-offset: 0.3em;
+    text-decoration-thickness: 1px;
+    transition: color $time-a $ease-out-quart;
+
+    &:hover,
+    &:focus-visible {
+      color: map-get($color-options, b);
+    }
+
+    @media all and ($viewport-type: $tablets) {
+      position: static;
+      margin-top: 2rem;
+      align-self: flex-start;
+    }
+  }
+}

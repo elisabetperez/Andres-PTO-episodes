@@ -1,0 +1,15 @@
+.f--font-a {
+  @include make-font-a();
+}
+.f--font-b {
+  @include make-font-b();
+}
+.f--font-c {
+  @include make-font-c();
+}
+.f--font-d {
+  @include make-font-d();
+}
+.f--font-e {
+  @include make-font-e();
+}

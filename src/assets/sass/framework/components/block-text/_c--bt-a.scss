@@ -1,0 +1,7 @@
+.c--bt-a {
+  @include make-bt-a();
+
+  &__accent {
+    color: map-get($color-options, b);
+  }
+}

@@ -1,0 +1,7 @@
+$position-values: (relative, absolute, fixed, sticky, static);
+
+@each $value in $position-values {
+  .f--p-#{$value} {
+    position: $value;
+  }
+}

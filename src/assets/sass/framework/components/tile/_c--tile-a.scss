@@ -1,0 +1,281 @@
+@keyframes c--tile-a-rotate {
+  from { transform: rotate(0deg) scale(1.2); }
+  to   { transform: rotate(360deg) scale(1.2); }
+}
+
+.c--tile-a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  padding: 0;
+
+  @media all and ($viewport-type: $tablets) {
+    min-height: 100vh;
+    min-height: 100svh;
+  }
+
+  &__meta {
+    position: absolute;
+    top: calc(#{$headerDesktop} + 1.5rem);
+    left: 6vw;
+    right: 6vw;
+    display: flex;
+    justify-content: space-between;
+    font-family: $type-c;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    z-index: 2;
+
+    @media all and ($viewport-type: $tablets) {
+      top: calc(#{$headerTablets} + 1rem);
+      left: 1.25rem;
+      right: 1.25rem;
+      font-size: 0.6rem;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+  }
+
+  &__title {
+    font-family: $type-a;
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(3.5rem, 12vw, 12rem);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    text-align: center;
+    position: relative;
+    z-index: 2;
+    padding: 0 6vw;
+  }
+
+  // === Variant A — pink solid ===
+  &--a {
+    background: map-get($color-options, b);
+    color: map-get($color-options, c);
+  }
+
+  // === Variant B — dark with radial gradient ===
+  &--b {
+    background: map-get($color-options, c);
+    color: map-get($color-options, a);
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 20% 30%, rgba(237, 170, 218, 0.5), transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(237, 170, 218, 0.3), transparent 60%),
+        linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+    }
+
+    .c--tile-a__title { color: map-get($color-options, a); }
+    .c--tile-a__meta  { color: map-get($color-options, a); }
+  }
+
+  // === Variant C — animated conic gradient ===
+  &--c {
+    background: map-get($color-options, a);
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 6%;
+      background: conic-gradient(from 0deg at 50% 50%, #EDAADA 0%, #FAFAFA 25%, #1A1A1A 50%, #FAFAFA 75%, #EDAADA 100%);
+      filter: blur(80px);
+      animation: c--tile-a-rotate 12s linear infinite;
+      opacity: 0.3;
+    }
+  }
+
+  &__sub {
+    font-family: $type-c;
+    font-size: 0.85rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-top: 1.5rem;
+    color: map-get($color-options, d);
+    position: relative;
+    z-index: 2;
+    text-align: center;
+  }
+
+  // === Variant D — split: big number + info ===
+  &--d {
+    background: map-get($color-options, a);
+    padding: 0 6vw;
+
+    .c--tile-a__title { display: none; }
+  }
+
+  // === Gradient variants (g1-g8) — conic gradients based on hero ===
+  &[class*='c--tile-a--g'] {
+    background: map-get($color-options, a);
+    color: map-get($color-options, c);
+    padding: 0 6vw;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: -6%;
+      filter: blur(85px);
+      opacity: 0.1;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .c--tile-a__title {
+      mix-blend-mode: difference;
+      color: map-get($color-options, a);
+    }
+
+    .c--tile-a__meta { color: map-get($color-options, c); }
+    .c--tile-a__num { color: map-get($color-options, c); }
+    .c--tile-a__name { color: map-get($color-options, c); }
+    .c--tile-a__desc { color: rgba(26, 26, 26, 0.75); }
+    .c--tile-a__tag {
+      color: map-get($color-options, c);
+      border-color: rgba(26, 26, 26, 0.35);
+      backdrop-filter: blur(4px);
+      background: rgba(250, 250, 250, 0.4);
+    }
+  }
+
+  &--g1::before { background: conic-gradient(from 0deg at 50% 50%, #EDAADA 0%, #FFE5F2 30%, #EDAADA 60%, #FAFAFA 100%); animation: c--tile-a-rotate 14s linear infinite; }
+  &--g2::before { background: conic-gradient(from 90deg at 30% 30%, #1A1A1A 0%, #2a2a2a 25%, #FAFAFA 60%, #EDAADA 100%); animation: c--tile-a-rotate 22s linear infinite reverse; }
+  &--g3::before { background: conic-gradient(from 180deg at 70% 70%, #EDAADA 0%, #1A1A1A 33%, #FAFAFA 66%, #EDAADA 100%); animation: c--tile-a-rotate 18s linear infinite; }
+  &--g4::before { background: conic-gradient(from 270deg at 50% 50%, #FAFAFA 0%, #EDAADA 25%, #FAFAFA 50%, #EDAADA 75%, #FAFAFA 100%); animation: c--tile-a-rotate 16s linear infinite reverse; }
+  &--g5::before { background: conic-gradient(from 45deg at 80% 20%, #1A1A1A 0%, #EDAADA 20%, #1A1A1A 50%, #EDAADA 80%, #1A1A1A 100%); animation: c--tile-a-rotate 24s linear infinite; }
+  &--g6::before { background: conic-gradient(from 135deg at 20% 80%, #FAFAFA 0%, #EDAADA 30%, #FAFAFA 60%, #EDAADA 100%); animation: c--tile-a-rotate 20s linear infinite reverse; }
+  &--g7::before { background: conic-gradient(from 315deg at 50% 50%, #1A1A1A 0%, #1A1A1A 25%, #EDAADA 50%, #FAFAFA 80%, #1A1A1A 100%); animation: c--tile-a-rotate 26s linear infinite; }
+  &--g8::before { background: conic-gradient(from 60deg at 60% 40%, #EDAADA 0%, #1A1A1A 25%, #EDAADA 50%, #FAFAFA 75%, #EDAADA 100%); animation: c--tile-a-rotate 17s linear infinite reverse; }
+
+  // === Vertical modifier — sticky cards stacking on vertical scroll ===
+  &--vertical {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100svh;
+    width: 100%;
+  }
+
+  // === Compact modifier — for grid use (multiple tiles per panel) ===
+  &--compact {
+    .c--tile-a__meta {
+      top: 1.25rem;
+      left: 1.5rem;
+      right: 1.5rem;
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+    }
+
+    .c--tile-a__title {
+      font-size: clamp(2rem, 5.5vw, 5rem);
+      padding: 0 1.5rem;
+    }
+
+    .c--tile-a__sub {
+      font-size: 0.7rem;
+      margin-top: 1rem;
+    }
+
+    .c--tile-a__num {
+      font-size: clamp(4rem, 11vw, 8rem);
+    }
+
+    .c--tile-a__name {
+      font-size: clamp(1.5rem, 3vw, 2.5rem);
+    }
+
+    .c--tile-a__desc {
+      font-size: 0.8rem;
+    }
+
+    .c--tile-a__grid {
+      gap: 1.5rem;
+      grid-template-columns: 1fr;
+
+      @media all and ($viewport-type: $tablets) {
+        gap: 1rem;
+      }
+    }
+
+    .c--tile-a__info {
+      gap: 1rem;
+    }
+
+    &.c--tile-a--d {
+      padding: 0 1.5rem;
+    }
+
+    &.c--tile-a--c::before {
+      filter: blur(50px);
+    }
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+    gap: 4rem;
+    align-items: center;
+    z-index: 2;
+    position: relative;
+
+    @media all and ($viewport-type: $tablets) {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+
+  &__num {
+    font-family: $type-a;
+    font-style: italic;
+    font-size: clamp(8rem, 22vw, 20rem);
+    line-height: 0.9;
+    color: map-get($color-options, b);
+    letter-spacing: -0.04em;
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  &__name {
+    font-family: $type-a;
+    font-style: italic;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 400;
+    line-height: 1;
+  }
+
+  &__desc {
+    color: map-get($color-options, d);
+    max-width: 30ch;
+  }
+
+  &__tags {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  &__tag {
+    font-family: $type-c;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.4rem 0.7rem;
+    border: 1px solid rgba(26, 26, 26, 0.18);
+  }
+}

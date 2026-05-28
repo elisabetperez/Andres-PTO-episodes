@@ -1,0 +1,14 @@
+// Inline list separated by " / " — links + separators wrap as a paragraph
+.c--bt-b {
+  @include make-bt-a();
+
+  &__separator {
+    font-family: $type-b;
+    font-style: normal;
+    font-weight: 400;
+    color: map-get($color-options, d);
+    margin: 0 0.4em;
+    font-size: 0.7em;
+    vertical-align: 0.15em;
+  }
+}

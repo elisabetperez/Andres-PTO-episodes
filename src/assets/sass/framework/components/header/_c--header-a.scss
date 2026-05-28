@@ -1,0 +1,84 @@
+.c--header-a {
+  position: fixed;
+  top: $progressBarHeight;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  height: $headerDesktop;
+  display: flex;
+  align-items: center;
+  padding: 0 2rem;
+  transition: background $time-a $ease-out-quart, backdrop-filter $time-a $ease-out-quart;
+
+  @media all and ($viewport-type: $tablets) {
+    height: $headerTablets;
+    padding: 0 1.25rem;
+  }
+
+  &--is-scrolled {
+    // transparent — no bg, no blur
+  }
+
+  &__brand {
+    @include make-font-d();
+    font-weight: 500;
+    color: map-get($color-options, c);
+    text-decoration: none;
+    font-family: $type-a;
+    font-style: italic;
+    font-size: 1.25rem;
+  }
+
+  &__nav {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+
+    @media all and ($viewport-type: $tabletm) {
+      gap: 1.25rem;
+    }
+    @media all and ($viewport-type: $tablets) {
+      display: none;
+    }
+  }
+
+  &__nav-link {
+    @include make-font-e();
+    color: map-get($color-options, c);
+    text-decoration: none;
+    transition: color $time-a $ease-out-quart;
+
+    &:hover,
+    &:focus-visible {
+      color: map-get($color-options, b);
+    }
+  }
+
+  &__lang {
+    margin-left: auto;
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  &__lang-link {
+    font-family: $type-c;
+    font-weight: 500;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    line-height: 1.4;
+    color: map-get($color-options, d);
+    text-decoration: none;
+    transition: color $time-a $ease-out-quart;
+
+    &--is-active {
+      color: map-get($color-options, c);
+    }
+
+    &:hover,
+    &:focus-visible {
+      color: map-get($color-options, b);
+    }
+  }
+}

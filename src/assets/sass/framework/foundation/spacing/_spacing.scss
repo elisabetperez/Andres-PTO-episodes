@@ -1,0 +1,37 @@
+$space-values: (0, 8, 16, 24, 32, 48, 64, 96) !default;
+
+$space-prefixes: (
+  pt: padding-top,
+  pb: padding-bottom,
+  pl: padding-left,
+  pr: padding-right,
+  mt: margin-top,
+  mb: margin-bottom,
+  ml: margin-left,
+  mr: margin-right,
+) !default;
+
+@mixin make-spaces($values, $prefixes, $breakpoints) {
+  @each $breakpoint-name, $breakpoint-value in $breakpoints {
+    @if ($breakpoint-value == 0) {
+      @each $attr-short, $attr-long in $prefixes {
+        @each $value in $values {
+          .f--#{$attr-short}-#{$value} {
+            #{$attr-long}: #{$value}#{'px'};
+          }
+        }
+      }
+    } @else {
+      @media screen and ($viewport-type: $breakpoint-value) {
+        @each $attr-short, $attr-long in $prefixes {
+          @each $value in $values {
+            .f--#{$breakpoint-name}-#{$attr-short}-#{$value} {
+              #{$attr-long}: #{$value}#{'px'};
+            }
+          }
+        }
+      }
+    }
+  }
+}
+@include make-spaces($space-values, $space-prefixes, $breakpoints-grid);

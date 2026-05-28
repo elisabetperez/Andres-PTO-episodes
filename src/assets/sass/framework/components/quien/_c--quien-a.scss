@@ -1,0 +1,25 @@
+.c--quien-a {
+  display: block;
+  width: fit-content;
+  margin-left: auto;
+  margin-top: 3rem;
+  color: map-get($color-options, c);
+  font-family: $type-a;
+  font-style: italic;
+  font-size: 1.5rem;
+  text-decoration: underline;
+  text-decoration-color: map-get($color-options, b);
+  text-underline-offset: 0.3em;
+  text-decoration-thickness: 1px;
+  transition: color $time-a $ease-out-quart;
+
+  &:hover,
+  &:focus-visible {
+    color: map-get($color-options, b);
+  }
+
+  @media all and ($viewport-type: $tablets) {
+    margin-top: 2rem;
+    font-size: 1.25rem;
+  }
+}

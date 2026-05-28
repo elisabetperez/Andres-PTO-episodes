@@ -1,0 +1,30 @@
+// c--link-a — italic serif link with underline (style of mockups)
+@mixin make-link-a() {
+  font-family: $type-a;
+  font-style: italic;
+  text-decoration: none;
+  position: relative;
+  display: inline;
+  color: inherit;
+  transition: color $time-a $ease-out-quart;
+  text-underline-offset: 0.15em;
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: currentColor;
+}
+
+@mixin make-link-a-color($key) {
+  color: map-get($color-options, $key);
+  text-decoration-color: map-get($color-options, $key);
+}
+
+@mixin make-link-a-interaction() {
+  color: map-get($color-options, b);
+  text-decoration-color: map-get($color-options, b);
+}
+
+@mixin make-link-a-strikethrough() {
+  text-decoration-line: line-through underline;
+  color: map-get($color-options, d);
+  text-decoration-color: map-get($color-options, b);
+}

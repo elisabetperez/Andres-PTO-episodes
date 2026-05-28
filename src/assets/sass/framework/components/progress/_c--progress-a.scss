@@ -1,0 +1,18 @@
+.c--progress-a {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: $progressBarHeight;
+  background: rgba(255, 255, 255, 0.05);
+  z-index: 60;
+  pointer-events: none;
+
+  &__bar {
+    height: 100%;
+    width: 0%;
+    background: map-get($color-options, b);
+    transform-origin: left center;
+    transition: width 0.05s linear;
+  }
+}

@@ -1,0 +1,149 @@
+.c--vstage-a {
+  position: relative;
+  width: 100%;
+  // No fixed height — ScrollTrigger pin extends the scroll while the sticky
+  // inner stays in viewport. After pin ends, footer enters with no wasted scroll.
+
+  &__sticky {
+    position: relative;
+    height: 100vh;
+    height: 100svh;
+    width: 100%;
+    overflow: hidden;
+    background: map-get($color-options, a);
+  }
+
+  &__bg {
+    position: absolute;
+    inset: -8%;
+    background: conic-gradient(
+      from 0deg at 50% 50%,
+      #EDAADA 0%, #FAFAFA 25%, #FFE5F2 50%, #FAFAFA 75%, #EDAADA 100%
+    );
+    filter: blur(140px);
+    animation: c--tile-a-rotate 22s linear infinite;
+    opacity: 0.85;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  &__card {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 6vw;
+    text-decoration: none;
+    color: inherit;
+    z-index: 1;
+    opacity: 0;
+    pointer-events: none;
+    will-change: opacity, transform;
+
+    &--is-active {
+      pointer-events: auto;
+    }
+
+    @media all and ($viewport-type: $tablets) {
+      padding: calc(#{$headerTablets} + 2rem) 1.25rem 4rem;
+    }
+  }
+
+  &__section-label {
+    position: absolute;
+    top: calc(#{$headerDesktop} + 1.5rem);
+    left: 6vw;
+    right: 6vw;
+    z-index: 2;
+
+    @media all and ($viewport-type: $tablets) {
+      top: calc(#{$headerTablets} + 1rem);
+      left: 1.25rem;
+      right: 1.25rem;
+    }
+  }
+
+  &__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    font-family: $type-c;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: map-get($color-options, c);
+    margin-bottom: 1rem;
+
+    @media all and ($viewport-type: $tablets) {
+      font-size: 0.6rem;
+    }
+  }
+
+  &__meta-cta {
+    color: map-get($color-options, b);
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 2rem;
+    width: 100%;
+    max-width: 1400px;
+
+    @media all and ($viewport-type: $tablets) {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+
+  &__num {
+    font-family: $type-a;
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(6rem, 18vw, 16rem);
+    line-height: 0.9;
+    color: map-get($color-options, c);
+    letter-spacing: -0.04em;
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  &__name {
+    font-family: $type-a;
+    font-style: italic;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 400;
+    line-height: 1;
+  }
+
+  &__desc {
+    color: rgba(26, 26, 26, 0.75);
+    max-width: 52ch;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  &__tags {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  &__tag {
+    font-family: $type-c;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.4rem 0.7rem;
+    border: 1px solid rgba(26, 26, 26, 0.35);
+    background: rgba(250, 250, 250, 0.55);
+    backdrop-filter: blur(3px);
+    color: map-get($color-options, c);
+  }
+}

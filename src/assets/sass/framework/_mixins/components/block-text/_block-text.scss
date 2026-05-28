@@ -1,0 +1,17 @@
+// c--bt-a — display italic paragraph
+@mixin make-bt-a() {
+  @include make-font-c();
+  color: map-get($color-options, c);
+
+  em,
+  i,
+  .c--bt-a__accent {
+    color: map-get($color-options, b);
+  }
+}
+
+// c--bt-b — small label (e.g. "03 clients")
+@mixin make-bt-b() {
+  @include make-font-e();
+  color: map-get($color-options, d);
+}

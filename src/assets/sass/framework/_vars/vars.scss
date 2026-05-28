@@ -1,0 +1,88 @@
+/* Colors */
+$color-a: #FAFAFA;          // background (off-white)
+$color-b: #EDAADA;          // accent (pink)
+$color-c: #1A1A1A;          // text primary (near-black)
+$color-d: rgba(26, 26, 26, 0.55); // text muted
+$color-e: #000000;          // pure black
+$color-f: rgba(237, 170, 218, 0.2); // accent translucent
+
+$color-options: (
+  a: $color-a,
+  b: $color-b,
+  c: $color-c,
+  d: $color-d,
+  e: $color-e,
+  f: $color-f,
+);
+
+$colorbg-options: (
+  a: $color-a,
+  b: $color-b,
+  c: $color-c,
+);
+
+/* Typography */
+$type-a: 'Noto Serif', serif;        // display / italic headings
+$type-b: 'Montserrat', sans-serif;   // body / ui
+$type-c: 'JetBrains Mono', monospace; // accents (arrows, microlabels)
+
+$font-body-size: 16px;
+$line-height: 1.4;
+
+/* Grid */
+$g-container-width: 1400px;
+
+$all: 0;
+$desktop: 1700px;
+$laptop: 1570px;
+$tabletl: 1300px;
+$tabletm: 1024px;
+$tablets: 810px;
+$mobile: 580px;
+$viewport-type: max-width;
+$viewport-layouts: (
+  all: $all,
+  desktop: $desktop,
+  laptop: $laptop,
+  tabletl: $tabletl,
+  tabletm: $tabletm,
+  tablets: $tablets,
+  mobile: $mobile,
+);
+$columns: 12;
+$gutter-width: 2rem;
+$half-gutter-width: $gutter-width * 0.5;
+$gutter-compensation: -1 * $half-gutter-width;
+
+$breakpoints-grid: (
+  all: $all,
+  laptop: $laptop,
+  tabletl: $tabletl,
+  tabletm: $tabletm,
+  tablets: $tablets,
+  mobile: $mobile,
+) !default;
+
+/* Spacing scale */
+$measure: 0.5rem;
+
+/* Time */
+$time-a: 0.3s;
+$time-b: 0.6s;
+$time-c: 0.1s;
+
+/* Header */
+$headerDesktop: 80px;
+$headerTablets: 64px;
+
+/* Progress bar */
+$progressBarHeight: 2px;
+
+/* Eases */
+$ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+$ease-out-cubic: cubic-bezier(0.215, 0.61, 0.355, 1);
+$ease-out-quart: cubic-bezier(0.165, 0.84, 0.44, 1);
+$ease-out-quint: cubic-bezier(0.23, 1, 0.32, 1);
+$ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+$ease-in-out-quart: cubic-bezier(0.77, 0, 0.175, 1);
+$ease-in-out-expo: cubic-bezier(1, 0, 0, 1);

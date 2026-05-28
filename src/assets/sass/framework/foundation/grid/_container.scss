@@ -1,0 +1,21 @@
+.f--container {
+  @include make-container();
+  max-width: $g-container-width;
+
+  @media all and ($viewport-type: $laptop) {
+    max-width: 92%;
+  }
+  @media all and ($viewport-type: $mobile) {
+    max-width: 100%;
+    padding-right: 1.25rem;
+    padding-left: 1.25rem;
+  }
+
+  &--fluid {
+    @include make-container-fluid();
+
+    @media all and ($viewport-type: 2000px) {
+      @include make-container-fluid-responsive();
+    }
+  }
+}

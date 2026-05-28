@@ -1,0 +1,17 @@
+@mixin make-container() {
+  margin: 0 auto;
+  padding-right: 1em;
+  padding-left: 1em;
+}
+
+@mixin make-container-fluid() {
+  margin: 0 auto;
+  max-width: 1900px;
+  padding-right: 0;
+  padding-left: 0;
+}
+
+@mixin make-container-fluid-responsive() {
+  margin: 0;
+  max-width: 100%;
+}

@@ -1,0 +1,5 @@
+@each $key, $value in $color-options {
+  .f--color-#{$key} {
+    color: $value;
+  }
+}

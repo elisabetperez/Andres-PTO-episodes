@@ -1,0 +1,20 @@
+$display-values: (none, block, inline, inline-block, flex, inline-flex, grid);
+
+@mixin build-display($size, $bkpt) {
+  @each $value in $display-values {
+    @if ($size == 'all') {
+      .f--d-#{$value} {
+        display: $value;
+      }
+    } @else {
+      .f--d-#{$size}-#{$value} {
+        @media all and ($viewport-type: #{$bkpt}) {
+          display: $value;
+        }
+      }
+    }
+  }
+}
+@each $size, $bkpt in $breakpoints-grid {
+  @include build-display($size, $bkpt);
+}

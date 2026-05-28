@@ -1,0 +1,8 @@
+.c--btn-a {
+  @include make-btn-a();
+
+  &:hover,
+  &:focus-visible {
+    @include make-btn-a-interaction();
+  }
+}

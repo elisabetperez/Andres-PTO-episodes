@@ -1,0 +1,35 @@
+.c--tile-grid-a {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 1fr;
+  gap: 1px;
+  background: rgba(26, 26, 26, 0.18); // hairline grid lines
+
+  @media all and ($viewport-type: $tabletm) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @media all and ($viewport-type: $tablets) {
+    grid-template-columns: repeat(2, 1fr);
+    height: auto;
+    grid-auto-rows: minmax(40vh, auto);
+  }
+  @media all and ($viewport-type: $mobile) {
+    grid-template-columns: 1fr;
+  }
+
+  > .c--tile-a {
+    height: 100%;
+    width: 100%;
+    min-height: 0;
+  }
+
+  // last child fills remainder of last row when count doesn't divide evenly
+  > .c--tile-a:last-child {
+    @media all and (min-width: 1024.01px) {
+      grid-column: span 2;
+    }
+  }
+}
