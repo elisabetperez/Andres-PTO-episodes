@@ -76,6 +76,7 @@
     border: 1px solid transparent;
     font-family: $type-b;
     font-size: 1.8rem;
+    font-weight: 300;
     border-radius: 50%;
     background: transparent;
     cursor: pointer;
@@ -95,6 +96,7 @@
 
     &.is-empty {
       color: $color-d;
+      font-weight: 300;
 
       &:hover {
         background: rgba(0, 0, 0, 0.04);
@@ -102,7 +104,7 @@
     }
 
     &.is-filled {
-      font-weight: 700;
+      font-weight: 500;
       color: $color-c;
 
       &:hover {
