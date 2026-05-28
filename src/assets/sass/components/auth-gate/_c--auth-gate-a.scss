@@ -49,7 +49,7 @@
 .is-gated {
   overflow: hidden;
 
-  > main, > div, > section {
+  > main {
     pointer-events: none;
     user-select: none;
   }

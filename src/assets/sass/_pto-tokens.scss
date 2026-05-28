@@ -1,13 +1,12 @@
-// PTO-specific design tokens, layered on top of the portfolio framework.
-// Paleta "Weekend": cream + reds + pastels.
+// PTO-specific design tokens.
+// Paleta Kurobeni — aubergine oscuro + rosa polvo.
 
-$pto-bg:        #f3ead5;            // Weekend Cream
-$pto-fg:        #1a1816;            // warm near-black
-$pto-muted:     #8a7e6a;            // warm muted gray
-$pto-accent:    #8a282e;            // Weekend Red (acento principal)
-$pto-coral:     #c45d62;            // Coral Glow (acento secundario)
-$pto-blush:     #e7b4b4;            // Pink Blush
-$pto-lilac:     #e2d4ea;            // Lilac Haze
-$pto-peach:     #f5d2b8;            // Sunlit Peach
-$pto-stroke:    rgba(26, 24, 22, 0.18);
-
+$pto-bg:        #281822;            // Kurobeni (aubergine oscuro)
+$pto-fg:        #d4b6bc;            // rosa polvo (texto sobre dark)
+$pto-muted:     rgba(212, 182, 188, 0.55);
+$pto-accent:    #c89098;            // rosa más saturado para énfasis
+$pto-coral:     #c45d62;
+$pto-blush:     #e7b4b4;
+$pto-lilac:     #e2d4ea;
+$pto-peach:     #f5d2b8;
+$pto-stroke:    rgba(212, 182, 188, 0.22);
