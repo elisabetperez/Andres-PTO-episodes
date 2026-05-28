@@ -1,7 +1,6 @@
 ---
 import Layout from "@/components/Layout.astro";
 import Calendar from "@/components/Calendar.astro";
-import ShowTitle from "@/components/ShowTitle.astro";
 import Sticker from "@/components/Sticker.astro";
 import { listEpisodes } from "@/lib/episodes";
 import { episodeLabel } from "@/lib/numbering";
@@ -24,8 +23,8 @@ const latestDate = latest ? formatDateEs(latest.date) : "";
 ---
 
 <Layout variant="hero">
-  <div class="c--corner-a c--corner-a--tl">
-    <ShowTitle size="mini" accent="una sitcom diaria" />
+  <div class="c--corner-a c--corner-a--tl c--corner-a--no-pad">
+    <Sticker />
   </div>
   <div class="c--corner-a c--corner-a--tr">
     <span class="c--corner-a__line">Temporada 1</span>
@@ -41,13 +40,10 @@ const latestDate = latest ? formatDateEs(latest.date) : "";
     <div class="c--stage-a__body">
       <Calendar episodes={calendarMap} today={today} initialSelected={latest?.date} />
 
-      <div class="c--stage-a__right">
-        <div class="c--stage-a__sticker"><Sticker /></div>
-        <div class="c--ep-info-a" id="episode-info" data-state={latest ? "filled" : "empty"}>
-          <p class="c--ep-info-a__kicker" id="ep-kicker">{latest ? latestLabel : "Sin episodios"}</p>
-          <h2 class="c--ep-info-a__title" id="ep-title">{latest ? latest.title : "Aún sin capítulos"}</h2>
-          <p class="c--ep-info-a__date" id="ep-accent">{latestDate}</p>
-        </div>
+      <div class="c--ep-info-a" id="episode-info" data-state={latest ? "filled" : "empty"}>
+        <p class="c--ep-info-a__kicker" id="ep-kicker">{latest ? latestLabel : "Sin episodios"}</p>
+        <h2 class="c--ep-info-a__title" id="ep-title">{latest ? latest.title : "Aún sin capítulos"}</h2>
+        <p class="c--ep-info-a__date" id="ep-accent">{latestDate}</p>
       </div>
     </div>
   </div>
