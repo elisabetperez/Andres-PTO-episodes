@@ -5,6 +5,36 @@
   max-width: 100%;
   position: relative;
 
+  &::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-0.25rem);
+    background: $pto-fg;
+    color: $pto-bg;
+    padding: 0.7rem 1rem;
+    border-radius: 10px;
+    font-family: $type-c;
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+    line-height: 1.4;
+    text-transform: none;
+    text-align: center;
+    width: max-content;
+    max-width: 22rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.18s ease 0.5s, transform 0.18s ease 0.5s;
+    z-index: 10;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+  }
+
+  &:hover::after {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-0.75rem);
+  }
+
   &__indicator {
     position: absolute;
     top: 0;
