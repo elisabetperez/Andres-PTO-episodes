@@ -17,8 +17,9 @@
     "sass": "^1.83.4"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.9",
     "@types/node": "^22.10.0",
-    "typescript": "^5.7.0",
+    "typescript": "^5.9.3",
     "vitest": "^2.1.0"
   }
 }
