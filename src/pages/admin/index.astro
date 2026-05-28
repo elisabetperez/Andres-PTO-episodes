@@ -3,6 +3,7 @@ import Layout from "@/components/Layout.astro";
 import ShowTitle from "@/components/ShowTitle.astro";
 import { verifySession } from "@/lib/auth";
 import { SEASONS, daysInSeason } from "@/config/seasons";
+import { listLogins } from "@/lib/audit";
 
 const token = Astro.cookies.get("pto_session")?.value;
 const secret = import.meta.env.SESSION_SECRET;
@@ -13,6 +14,16 @@ const minDate = allDates[0] ?? "";
 const maxDate = allDates[allDates.length - 1] ?? "";
 const today = new Date().toISOString().slice(0, 10);
 const initialDate = allDates.includes(today) ? today : maxDate;
+
+const logins = isAuthed ? await listLogins(40).catch(() => []) : [];
+const uniqueEmails = new Set(logins.map((l) => l.email));
+const fmtWhen = new Intl.DateTimeFormat("es-ES", {
+  day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit", timeZone: "Europe/Madrid",
+});
+function nameOnly(email: string): string {
+  const at = email.indexOf("@");
+  return at >= 0 ? email.slice(0, at) : email;
+}
 ---
 
 {!isAuthed ? (
@@ -56,6 +67,27 @@ const initialDate = allDates.includes(today) ? today : maxDate;
         <a class="c--admin-a__btn is-ghost" href="/">← Volver</a>
       </div>
 
+      <section class="c--admin-a__section">
+        <h2 class="c--admin-a__h2">Accesos</h2>
+        <p class="c--admin-a__hint">
+          {uniqueEmails.size === 0
+            ? "Aún nadie ha entrado."
+            : `${uniqueEmails.size} ${uniqueEmails.size === 1 ? "persona" : "personas"} distintas han entrado · últimos ${logins.length} eventos:`}
+        </p>
+        {logins.length > 0 && (
+          <ul class="c--admin-a__logins">
+            {logins.map((ev) => (
+              <li>
+                <strong>{nameOnly(ev.email)}</strong>
+                <span class="c--admin-a__email">{ev.email}</span>
+                <span class="c--admin-a__when">{fmtWhen.format(new Date(ev.at))}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+
+      <h2 class="c--admin-a__h2">Editar capítulo</h2>
       <form id="episode-form" class="c--admin-a__form">
         <label class="c--admin-a__field">
           <span>Fecha</span>

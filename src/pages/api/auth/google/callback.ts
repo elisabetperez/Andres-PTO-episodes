@@ -1,5 +1,6 @@
 import type { APIRoute } from "astro";
 import { signSession } from "@/lib/auth";
+import { recordLogin } from "@/lib/audit";
 
 const SESSION_TTL_MS = 24 * 60 * 60 * 1000;
 const STATE_COOKIE = "pto_oauth_state";
@@ -23,7 +24,7 @@ function htmlError(msg: string, status: number): Response {
   return new Response(body, { status, headers: { "Content-Type": "text/html; charset=utf-8" } });
 }
 
-export const GET: APIRoute = async ({ url, cookies, redirect }) => {
+export const GET: APIRoute = async ({ url, cookies, redirect, clientAddress, request }) => {
   const clientId = import.meta.env.GOOGLE_CLIENT_ID;
   const clientSecret = import.meta.env.GOOGLE_CLIENT_SECRET;
   const allowed = import.meta.env.ALLOWED_EMAIL;
@@ -94,6 +95,13 @@ export const GET: APIRoute = async ({ url, cookies, redirect }) => {
     path: "/",
     maxAge: SESSION_TTL_MS / 1000,
   });
+
+  // Fire-and-forget audit log; don't block the redirect if it fails.
+  recordLogin({
+    email,
+    ip: clientAddress || undefined,
+    ua: request.headers.get("user-agent") ?? undefined,
+  }).catch((err) => console.error("recordLogin failed:", err));
 
   return redirect("/", 302);
 };

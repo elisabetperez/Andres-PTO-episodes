@@ -110,4 +110,68 @@
     gap: 1rem;
     margin-bottom: 1.5rem;
   }
+
+  &__section {
+    margin: 2rem 0;
+    padding: 1.25rem;
+    background: rgba(40, 24, 34, 0.04);
+    border: 1px solid $pto-stroke;
+    border-radius: 12px;
+  }
+
+  &__h2 {
+    font-family: $type-a;
+    font-size: 1.1rem;
+    margin: 1.5rem 0 0.75rem;
+    color: $pto-fg;
+    font-weight: 600;
+  }
+
+  &__hint {
+    font-family: $type-c;
+    font-size: 0.75rem;
+    color: $pto-muted;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 0 0 0.75rem;
+  }
+
+  &__logins {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    max-height: 18rem;
+    overflow-y: auto;
+
+    li {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 0.6rem;
+      align-items: baseline;
+      padding: 0.4rem 0;
+      border-bottom: 1px solid rgba(40, 24, 34, 0.06);
+      font-family: $type-b;
+      font-size: 0.85rem;
+
+      strong {
+        color: $pto-fg;
+        font-weight: 600;
+      }
+    }
+  }
+
+  &__email {
+    color: $pto-muted;
+    font-size: 0.75rem;
+  }
+
+  &__when {
+    font-family: $type-c;
+    font-size: 0.7rem;
+    color: $pto-muted;
+    white-space: nowrap;
+  }
 }
