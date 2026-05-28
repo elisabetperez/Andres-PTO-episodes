@@ -71,6 +71,10 @@
     display: flex;
     gap: 0.4rem;
     align-items: stretch;
+
+    @media all and ($viewport-type: $mobile) {
+      flex-wrap: wrap;
+    }
   }
 
   &__input {

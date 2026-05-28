@@ -9,6 +9,11 @@
   height: clamp(5.5rem, 9vw, 8rem);
   display: inline-block;
 
+  @media all and ($viewport-type: $mobile) {
+    width: 4rem;
+    height: 4rem;
+  }
+
   &__svg {
     width: 100%;
     height: 100%;

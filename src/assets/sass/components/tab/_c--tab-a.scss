@@ -18,6 +18,12 @@
   padding: 0.75rem 1.5rem 1rem;
   border-radius: 14px 14px 0 0;
   box-shadow: 0 -4px 18px rgba(0, 0, 0, 0.08);
+
+  @media all and ($viewport-type: $mobile) {
+    padding: 0.55rem 1rem 0.8rem;
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+  }
   transition: transform 0.18s ease, background 0.18s ease;
 
   &::before {

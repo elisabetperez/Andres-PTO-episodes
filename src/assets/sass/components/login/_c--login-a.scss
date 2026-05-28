@@ -84,7 +84,12 @@
   &--tr { top: 0; right: 0; text-align: right; }
   &--bl { bottom: 0; left: 0; text-align: left; }
   &--br { bottom: 0; right: 0; text-align: right; }
-  &--no-pad { padding: 1rem; pointer-events: auto; }
+  &--no-pad {
+    padding: 1rem;
+    pointer-events: auto;
+    // The sticker corner stays visible on mobile (other corners hide).
+    @media all and ($viewport-type: $tablets) { display: block; padding: 0.5rem; }
+  }
 
   &__line { display: block; }
   &__accent { color: $pto-accent; }
