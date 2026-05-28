@@ -1,0 +1,20 @@
+---
+// Centerpiece "poster" of the currently-selected episode.
+// Big serif title + italic accent overlay (date) + kicker (label).
+
+type Props = {
+  kicker: string;
+  title: string;
+  accent: string;
+  state?: "filled" | "empty" | "loading" | "error";
+};
+const { kicker, title, accent, state = "filled" } = Astro.props;
+---
+
+<section class="c--ep-hero-a" id="episode-hero" data-state={state}>
+  <p class="c--ep-hero-a__kicker" id="ep-kicker">{kicker}</p>
+  <div class="c--ep-hero-a__display">
+    <h1 class="c--ep-hero-a__title" id="ep-title">{title}</h1>
+    <span class="c--ep-hero-a__accent" id="ep-accent">{accent}</span>
+  </div>
+</section>

@@ -1,0 +1,61 @@
+.c--ep-hero-a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  text-align: center;
+  max-width: 56rem;
+  margin: 0 auto;
+
+  &__kicker {
+    font-family: $type-c;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: $pto-muted;
+    margin: 0;
+  }
+
+  &__display {
+    position: relative;
+    display: inline-block;
+  }
+
+  &__title {
+    font-family: $type-a;
+    font-weight: 600;
+    line-height: 0.95;
+    letter-spacing: -0.01em;
+    margin: 0;
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    color: $pto-fg;
+  }
+
+  &__accent {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $pto-accent;
+    font-style: italic;
+    font-weight: 600;
+    line-height: 0.95;
+    letter-spacing: -0.01em;
+    pointer-events: none;
+    transform: translateY(0.6em) rotate(-2.5deg);
+    white-space: nowrap;
+    font-size: clamp(1.2rem, 3vw, 2rem);
+  }
+
+  &[data-state="empty"] {
+    .c--ep-hero-a__title  { color: $pto-muted; }
+    .c--ep-hero-a__accent { color: $pto-muted; opacity: 0.6; }
+  }
+  &[data-state="loading"] {
+    opacity: 0.6;
+  }
+  &[data-state="error"] {
+    .c--ep-hero-a__title  { color: #c00; }
+  }
+}

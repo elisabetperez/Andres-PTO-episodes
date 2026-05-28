@@ -59,6 +59,11 @@
     text-align: center;
     gap: 2rem;
   }
+
+  // When the hero page is the home, give it more headroom for the calendar.
+  &.is-hero &__inner {
+    padding-bottom: 2rem;
+  }
 }
 
 // Legacy title class kept around for the admin/episode pages.

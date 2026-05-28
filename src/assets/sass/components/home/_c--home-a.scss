@@ -1,21 +1,35 @@
-.c--home-a {
+// "Stage": full-viewport home that always shows hero + calendar.
+.c--stage-a {
   flex: 1;
-  display: grid;
-  gap: 3.5rem;
-  grid-template-columns: minmax(0, 24rem) minmax(0, 1fr);
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 3rem;
+  width: 100%;
+  position: relative;
 
   @media all and ($viewport-type: $tablets) {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-    align-items: start;
+    gap: 2rem;
   }
 
   &__sticker {
     position: absolute;
-    top: 4rem;
-    right: clamp(2rem, 6vw, 5rem);
+    top: -2rem;
+    right: clamp(2rem, 8vw, 6rem);
     z-index: 2;
+
+    @media all and ($viewport-type: $tablets) {
+      top: -1rem;
+      right: 1rem;
+      transform: scale(0.7);
+      transform-origin: top right;
+    }
+  }
+
+  &__calendar {
+    width: 100%;
+    display: flex;
+    justify-content: center;
   }
 }
