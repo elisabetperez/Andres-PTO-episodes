@@ -75,7 +75,6 @@ const initialYm = initialSelectedSafe.slice(0, 7) || months[months.length - 1] |
 >
   <div class="c--calendar-a__nav">
     <button type="button" class="c--calendar-a__navbtn" data-dir="-1" aria-label="Día anterior">←</button>
-    <h3 class="c--calendar-a__title" data-title-target></h3>
     <button type="button" class="c--calendar-a__navbtn" data-dir="1" aria-label="Día siguiente">→</button>
   </div>
 
@@ -117,11 +116,8 @@ const initialYm = initialSelectedSafe.slice(0, 7) || months[months.length - 1] |
 <script>
   const root = document.querySelector(".c--calendar-a") as HTMLElement;
   if (root) {
-    const titleEl = root.querySelector("[data-title-target]") as HTMLElement;
     const monthEls = Array.from(root.querySelectorAll<HTMLElement>("[data-month]"));
-    const monthYms = monthEls.map((el) => el.dataset.month!);
     const navigable: string[] = JSON.parse(root.dataset.navigable || "[]");
-    const NAMES = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
     const prevBtn = root.querySelector('[data-dir="-1"]') as HTMLButtonElement;
     const nextBtn = root.querySelector('[data-dir="1"]') as HTMLButtonElement;
 
@@ -134,8 +130,6 @@ const initialYm = initialSelectedSafe.slice(0, 7) || months[months.length - 1] |
     function showMonthOf(date: string) {
       const ym = date.slice(0, 7);
       monthEls.forEach((el) => { el.hidden = el.dataset.month !== ym; });
-      const [y, m] = ym.split("-").map(Number);
-      titleEl.textContent = `${NAMES[m - 1]} ${y}`;
     }
 
     function updateNavVisibility() {
