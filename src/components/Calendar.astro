@@ -2,12 +2,11 @@
 import { SEASONS, isInAnySeason } from "@/config/seasons";
 
 type Props = {
-  episodeDates: readonly string[];
+  episodes: ReadonlyMap<string, string>; // date → title (for hover label)
   today: string; // YYYY-MM-DD
 };
 
-const { episodeDates, today } = Astro.props;
-const hasEntry = new Set(episodeDates);
+const { episodes, today } = Astro.props;
 
 const MONTHS_ES = [
   "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
@@ -34,16 +33,16 @@ function buildMonth(ym: string) {
   const last = new Date(Date.UTC(y, m, 0));
   // Monday-first week index: Mon=0..Sun=6
   const startOffset = (first.getUTCDay() + 6) % 7;
-  const cells: Array<{ date: string | null; status: "outside-month" | "outside-season" | "empty" | "filled" | "today" }> = [];
-  for (let i = 0; i < startOffset; i++) cells.push({ date: null, status: "outside-month" });
+  type Status = "outside-month" | "outside-season" | "empty" | "filled";
+  const cells: Array<{ date: string | null; status: Status; isToday: boolean }> = [];
+  for (let i = 0; i < startOffset; i++) cells.push({ date: null, status: "outside-month", isToday: false });
   for (let d = 1; d <= last.getUTCDate(); d++) {
     const iso = `${y}-${String(m).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
-    let status: typeof cells[number]["status"];
+    let status: Status;
     if (!isInAnySeason(iso)) status = "outside-season";
-    else if (hasEntry.has(iso)) status = "filled";
+    else if (episodes.has(iso)) status = "filled";
     else status = "empty";
-    if (iso === today) status = "today";
-    cells.push({ date: iso, status });
+    cells.push({ date: iso, status, isToday: iso === today });
   }
   return { name: `${MONTHS_ES[m - 1]} ${y}`, cells };
 }
@@ -60,12 +59,17 @@ const monthData = months.map(buildMonth);
       <div class="c--calendar-a__grid">
         {mo.cells.map((cell) => {
           if (!cell.date) return <span class="c--calendar-a__cell is-blank" />;
-          const cls = `c--calendar-a__cell is-${cell.status}`;
+          const cls = [
+            "c--calendar-a__cell",
+            `is-${cell.status}`,
+            cell.isToday ? "is-today" : "",
+          ].filter(Boolean).join(" ");
           const day = Number(cell.date.slice(8));
           if (cell.status === "outside-season") {
             return <span class={cls}>{day}</span>;
           }
-          return <a class={cls} href={`/e/${cell.date}`}>{day}</a>;
+          const title = cell.status === "filled" ? episodes.get(cell.date) : "Sin episodio";
+          return <a class={cls} href={`/e/${cell.date}`} title={title}>{day}</a>;
         })}
       </div>
     </div>

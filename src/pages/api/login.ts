@@ -8,21 +8,32 @@ const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
 
 type RateRecord = { count: number; firstAt: number };
 
+function rateKey(ip: string): string {
+  return `login/${ip}`;
+}
+
 async function checkRateLimit(ip: string): Promise<{ ok: true } | { ok: false; retryAfterSec: number }> {
   const store = getStore("rate-limit");
-  const key = `login/${ip}`;
+  const rec = (await store.get(rateKey(ip), { type: "json" })) as RateRecord | null;
+  if (!rec) return { ok: true };
   const now = Date.now();
-  const rec = ((await store.get(key, { type: "json" })) as RateRecord | null) ?? null;
+  if (now - rec.firstAt > RATE_LIMIT_WINDOW_MS) return { ok: true };
+  if (rec.count >= RATE_LIMIT_MAX) {
+    return { ok: false, retryAfterSec: Math.ceil((rec.firstAt + RATE_LIMIT_WINDOW_MS - now) / 1000) };
+  }
+  return { ok: true };
+}
+
+async function recordFailedAttempt(ip: string): Promise<void> {
+  const store = getStore("rate-limit");
+  const key = rateKey(ip);
+  const rec = (await store.get(key, { type: "json" })) as RateRecord | null;
+  const now = Date.now();
   if (!rec || now - rec.firstAt > RATE_LIMIT_WINDOW_MS) {
     await store.setJSON(key, { count: 1, firstAt: now });
-    return { ok: true };
+  } else {
+    await store.setJSON(key, { count: rec.count + 1, firstAt: rec.firstAt });
   }
-  if (rec.count >= RATE_LIMIT_MAX) {
-    const retryAfterSec = Math.ceil((rec.firstAt + RATE_LIMIT_WINDOW_MS - now) / 1000);
-    return { ok: false, retryAfterSec };
-  }
-  await store.setJSON(key, { count: rec.count + 1, firstAt: rec.firstAt });
-  return { ok: true };
 }
 
 export const POST: APIRoute = async ({ request, clientAddress, cookies }) => {
@@ -42,6 +53,7 @@ export const POST: APIRoute = async ({ request, clientAddress, cookies }) => {
     return new Response(JSON.stringify({ error: "Server misconfigured" }), { status: 500 });
   }
   if (body.password !== expected) {
+    await recordFailedAttempt(ip);
     return new Response(JSON.stringify({ error: "Contraseña incorrecta" }), { status: 401 });
   }
 

@@ -10,7 +10,7 @@ try {
   console.error("Could not list episodes:", err);
 }
 const today = new Date().toISOString().slice(0, 10);
-const episodeDates = episodes.map((e) => e.date);
+const episodeMap = new Map(episodes.map((e) => [e.date, e.title]));
 ---
 
 <Layout>
@@ -20,6 +20,6 @@ const episodeDates = episodes.map((e) => e.date);
       <p>Una sitcom diaria, en formato calendario.</p>
     </header>
 
-    <Calendar episodeDates={episodeDates} today={today} />
+    <Calendar episodes={episodeMap} today={today} />
   </section>
 </Layout>

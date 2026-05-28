@@ -30,7 +30,7 @@ const label = episodeLabel(date, allDates);
   <section class="o--section">
     <p><a href="/">← Volver al calendario</a></p>
     <p>
-      <small>{season.label} · {date}{label ? ` · ${label}` : ""}</small>
+      <small>{label ?? season.label} · {date}</small>
     </p>
     {episode ? (
       <article>
