@@ -1,0 +1,29 @@
+---
+import "@/assets/sass/style.scss";
+
+type Props = {
+  title?: string;
+  description?: string;
+};
+
+const {
+  title = "El PTO de Andrés",
+  description = "El PTO de Andrés como capítulos de Friends.",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <main class="page">
+      <slot />
+    </main>
+  </body>
+</html>
