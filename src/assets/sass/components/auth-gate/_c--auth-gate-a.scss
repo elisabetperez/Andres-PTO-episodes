@@ -73,13 +73,15 @@
   // Google button: white pill with dark text. Mayor specificity than the
   // base .c--login-a__btn so it wins inside the gate.
   &__panel .c--login-a__btn {
-    background: #fff;
+    background: $pto-fg;
     color: $pto-bg;
-    border-color: rgba(0, 0, 0, 0.08);
+    border-color: $pto-fg;
     font-weight: 600;
 
     &:hover {
-      border-color: $pto-fg;
+      background: $pto-accent;
+      border-color: $pto-accent;
+      color: $pto-bg;
     }
   }
 }
