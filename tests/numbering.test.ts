@@ -28,15 +28,15 @@ describe("episodeNumber", () => {
 });
 
 describe("episodeLabel", () => {
-  it("formats Pilotos as 'Pilotos · Ep 03'", () => {
+  it("formats pilots as 'Piloto 03'", () => {
     expect(
       episodeLabel("2026-05-27", ["2026-05-25", "2026-05-26", "2026-05-27"])
-    ).toBe("Pilotos · Ep 03");
+    ).toBe("Piloto 03");
   });
 
-  it("formats Temporada 1 as 'T1 · Ep 02'", () => {
+  it("formats s1 as 'Temporada 1 · Ep 02'", () => {
     expect(episodeLabel("2026-06-03", ["2026-06-01", "2026-06-03"])).toBe(
-      "T1 · Ep 02"
+      "Temporada 1 · Ep 02"
     );
   });
 

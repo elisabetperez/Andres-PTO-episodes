@@ -2,6 +2,7 @@
 import Layout from "@/components/Layout.astro";
 import Calendar from "@/components/Calendar.astro";
 import { listEpisodes } from "@/lib/episodes";
+import { episodeLabel } from "@/lib/numbering";
 
 let episodes: Awaited<ReturnType<typeof listEpisodes>> = [];
 try {
@@ -10,8 +11,12 @@ try {
   console.error("Could not list episodes:", err);
 }
 const today = new Date().toISOString().slice(0, 10);
-const episodeMap = new Map(episodes.map((e) => [e.date, e.title]));
+const dates = episodes.map((e) => e.date);
+const calendarMap = new Map(
+  episodes.map((e) => [e.date, { title: e.title, label: episodeLabel(e.date, dates) ?? "" }])
+);
 const latest = episodes[episodes.length - 1] ?? null;
+const latestLabel = latest ? (episodeLabel(latest.date, dates) ?? latest.date) : "";
 ---
 
 <Layout>
@@ -21,17 +26,17 @@ const latest = episodes[episodes.length - 1] ?? null;
   </header>
 
   <div class="c--home-a">
-    <Calendar episodes={episodeMap} today={today} />
+    <Calendar episodes={calendarMap} today={today} initialSelected={latest?.date} />
 
     <aside class="c--episode-panel-a" id="episode-panel" data-state={latest ? "filled" : "empty"}>
       <p class="c--episode-panel-a__kicker" id="ep-kicker">
-        {latest ? `Último episodio · ${latest.date}` : "Selecciona un día"}
+        {latest ? latestLabel : "Selecciona un día"}
       </p>
       <h2 class="c--episode-panel-a__title" id="ep-title">
         {latest ? latest.title : "Aún sin episodios"}
       </h2>
-      <p class="c--episode-panel-a__summary" id="ep-summary">
-        {latest ? latest.summary : "Cuando Andrés cuente algo, aparecerá aquí."}
+      <p class="c--episode-panel-a__summary" id="ep-summary" hidden={!latest || !latest.summary}>
+        {latest?.summary ?? ""}
       </p>
     </aside>
   </div>
@@ -41,14 +46,19 @@ const latest = episodes[episodes.length - 1] ?? null;
   const panel = document.getElementById("episode-panel")!;
   const kicker = document.getElementById("ep-kicker")!;
   const title = document.getElementById("ep-title")!;
-  const summary = document.getElementById("ep-summary")!;
+  const summary = document.getElementById("ep-summary") as HTMLParagraphElement;
+
+  function setSummary(text: string) {
+    summary.textContent = text;
+    summary.hidden = !text;
+  }
 
   document.addEventListener("calendar:select", async (e) => {
-    const detail = (e as CustomEvent).detail as { date: string; status: string; title: string };
+    const detail = (e as CustomEvent).detail as { date: string; status: string; title: string; label: string };
     panel.dataset.state = "loading";
-    kicker.textContent = `Cargando · ${detail.date}`;
+    kicker.textContent = detail.label || `Cargando · ${detail.date}`;
     title.textContent = detail.title || "";
-    summary.textContent = "";
+    setSummary("");
 
     try {
       const r = await fetch(`/api/episode?date=${encodeURIComponent(detail.date)}`);
@@ -56,20 +66,20 @@ const latest = episodes[episodes.length - 1] ?? null;
       const data = await r.json() as { episode: { date: string; title: string; summary: string } | null };
       if (data.episode) {
         panel.dataset.state = "filled";
-        kicker.textContent = `Episodio · ${data.episode.date}`;
+        kicker.textContent = detail.label || `Episodio · ${data.episode.date}`;
         title.textContent = data.episode.title;
-        summary.textContent = data.episode.summary;
+        setSummary(data.episode.summary);
       } else {
         panel.dataset.state = "empty";
         kicker.textContent = `Sin episodio · ${detail.date}`;
         title.textContent = "Sin episodio";
-        summary.textContent = "Este día está en el rango del PTO pero todavía no hay entrada.";
+        setSummary("");
       }
     } catch (err) {
       panel.dataset.state = "error";
       kicker.textContent = "Error";
       title.textContent = "No se pudo cargar";
-      summary.textContent = "Vuelve a intentarlo en un momento.";
+      setSummary("Vuelve a intentarlo en un momento.");
     }
   });
 </script>

@@ -11,7 +11,7 @@ export function countWords(s: string): number {
 }
 
 export function validateSummary(s: string): ValidationResult {
-  if (!s.trim()) return { ok: false, error: "Falta el resumen" };
+  if (!s.trim()) return { ok: true }; // opcional
   const n = countWords(s);
   if (n > MAX_SUMMARY_WORDS) {
     return {

@@ -1,12 +1,15 @@
 ---
 import { SEASONS, isInAnySeason } from "@/config/seasons";
 
+type EpisodeInfo = { title: string; label: string };
+
 type Props = {
-  episodes: ReadonlyMap<string, string>; // date → title
-  today: string; // YYYY-MM-DD
+  episodes: ReadonlyMap<string, EpisodeInfo>;
+  today: string;            // YYYY-MM-DD
+  initialSelected?: string; // YYYY-MM-DD — date to highlight on load
 };
 
-const { episodes, today } = Astro.props;
+const { episodes, today, initialSelected } = Astro.props;
 
 const MONTHS_ES = [
   "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
@@ -51,11 +54,14 @@ function buildMonth(ym: string) {
 }
 const monthData = months.map(buildMonth);
 
-// Default month: the one matching today.
-const initialYm = months.find((ym) => ym === todayYm) ?? months[months.length - 1];
+// Initial month preference: month of initialSelected → today's month → last available.
+const initialYm =
+  (initialSelected && months.find((ym) => initialSelected.startsWith(ym))) ??
+  months.find((ym) => ym === todayYm) ??
+  months[months.length - 1];
 ---
 
-<div class="c--calendar-a" data-initial-month={initialYm}>
+<div class="c--calendar-a" data-initial-month={initialYm} data-initial-selected={initialSelected ?? ""}>
   <div class="c--calendar-a__nav">
     <button type="button" class="c--calendar-a__navbtn" data-dir="-1" aria-label="Mes anterior">←</button>
     <h3 class="c--calendar-a__title" data-title-target></h3>
@@ -74,18 +80,20 @@ const initialYm = months.find((ym) => ym === todayYm) ?? months[months.length - 
             "c--calendar-a__cell",
             `is-${cell.status}`,
             cell.isToday ? "is-today" : "",
+            cell.date === initialSelected ? "is-selected" : "",
           ].filter(Boolean).join(" ");
           const day = Number(cell.date.slice(8));
           if (cell.status === "outside-season" || cell.status === "future") {
             return <span class={cls}>{day}</span>;
           }
-          const title = cell.status === "filled" ? episodes.get(cell.date) : "Sin episodio";
+          const info = cell.status === "filled" ? episodes.get(cell.date) : null;
           return (
             <button
               type="button"
               class={cls}
               data-date={cell.date}
-              data-title={title}
+              data-title={info?.title ?? "Sin episodio"}
+              data-label={info?.label ?? ""}
               data-status={cell.status}
             >{day}</button>
           );
@@ -135,11 +143,14 @@ const initialYm = months.find((ym) => ym === todayYm) ?? months[months.length - 
 
       const dayBtn = target.closest<HTMLButtonElement>("[data-date]");
       if (dayBtn) {
-        const date = dayBtn.dataset.date!;
-        const status = dayBtn.dataset.status!;
         root.dispatchEvent(new CustomEvent("calendar:select", {
           bubbles: true,
-          detail: { date, status, title: dayBtn.dataset.title ?? "" },
+          detail: {
+            date: dayBtn.dataset.date!,
+            status: dayBtn.dataset.status!,
+            title: dayBtn.dataset.title ?? "",
+            label: dayBtn.dataset.label ?? "",
+          },
         }));
         root.querySelectorAll(".is-selected").forEach((el) => el.classList.remove("is-selected"));
         dayBtn.classList.add("is-selected");

@@ -45,15 +45,9 @@ describe("validateSummary", () => {
     });
   });
 
-  it("rejects empty summary", () => {
-    expect(validateSummary("")).toEqual({
-      ok: false,
-      error: "Falta el resumen",
-    });
-    expect(validateSummary("   ")).toEqual({
-      ok: false,
-      error: "Falta el resumen",
-    });
+  it("accepts empty summary (optional field)", () => {
+    expect(validateSummary("")).toEqual({ ok: true });
+    expect(validateSummary("   ")).toEqual({ ok: true });
   });
 });
 
