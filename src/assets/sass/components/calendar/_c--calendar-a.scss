@@ -86,7 +86,7 @@
     }
 
     &.is-empty {
-      color: rgba(40, 24, 34, 0.75);
+      color: $pto-fg;
       font-weight: 300;
 
       &:hover {
