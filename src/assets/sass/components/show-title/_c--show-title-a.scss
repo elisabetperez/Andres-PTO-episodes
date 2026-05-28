@@ -26,20 +26,21 @@
     justify-content: center;
     color: $pto-accent;
     font-style: italic;
-    font-weight: 500;
-    letter-spacing: 0;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 0.95;
     pointer-events: none;
-    transform: translateY(0.15em) rotate(-2deg);
+    transform: translateY(0.05em) rotate(-3deg);
     white-space: nowrap;
   }
 
   &--hero {
-    .c--show-title-a__main { font-size: clamp(3rem, 9vw, 6rem); }
-    .c--show-title-a__accent { font-size: clamp(1.4rem, 3.5vw, 2.3rem); }
+    .c--show-title-a__main   { font-size: clamp(3rem, 9vw, 6rem); }
+    .c--show-title-a__accent { font-size: clamp(2.6rem, 7.5vw, 5rem); }
   }
 
   &--medium {
-    .c--show-title-a__main { font-size: clamp(1.5rem, 3.5vw, 2.25rem); }
-    .c--show-title-a__accent { font-size: clamp(0.85rem, 1.5vw, 1.05rem); }
+    .c--show-title-a__main   { font-size: clamp(1.5rem, 3.5vw, 2.25rem); }
+    .c--show-title-a__accent { font-size: clamp(1.3rem, 3vw, 1.9rem); }
   }
 }
