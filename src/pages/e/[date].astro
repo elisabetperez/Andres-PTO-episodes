@@ -1,0 +1,47 @@
+---
+import Layout from "@/components/Layout.astro";
+import { isInAnySeason, getSeasonForDate } from "@/config/seasons";
+import { getEpisode, listEpisodes } from "@/lib/episodes";
+import { episodeLabel } from "@/lib/numbering";
+
+const { date } = Astro.params;
+if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+  return new Response("Not Found", { status: 404 });
+}
+if (!isInAnySeason(date)) {
+  return new Response("Not Found", { status: 404 });
+}
+
+const season = getSeasonForDate(date)!;
+let episode = null;
+let allDates: string[] = [];
+try {
+  episode = await getEpisode(date);
+  const all = await listEpisodes();
+  allDates = all.map((e) => e.date);
+} catch (err) {
+  console.error("Could not fetch episode:", err);
+}
+
+const label = episodeLabel(date, allDates);
+---
+
+<Layout title={episode ? `${episode.title} · El PTO de Andrés` : `Sin episodio · ${date}`}>
+  <section class="o--section">
+    <p><a href="/">← Volver al calendario</a></p>
+    <p>
+      <small>{season.label} · {date}{label ? ` · ${label}` : ""}</small>
+    </p>
+    {episode ? (
+      <article>
+        <h1>{episode.title}</h1>
+        <p>{episode.summary}</p>
+      </article>
+    ) : (
+      <article>
+        <h1>Sin episodio</h1>
+        <p>Este día está en el rango del PTO pero todavía no hay entrada.</p>
+      </article>
+    )}
+  </section>
+</Layout>
