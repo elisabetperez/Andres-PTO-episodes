@@ -1,35 +1,95 @@
-// "Stage": full-viewport home that always shows hero + calendar.
+// Stage: side-by-side title (with episode info) + calendar.
 .c--stage-a {
   flex: 1;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   justify-content: center;
-  gap: 3rem;
+  gap: clamp(2rem, 6vw, 5rem);
   width: 100%;
   position: relative;
 
   @media all and ($viewport-type: $tablets) {
+    grid-template-columns: 1fr;
     gap: 2rem;
+    text-align: center;
   }
 
   &__sticker {
     position: absolute;
-    top: -2rem;
-    right: clamp(2rem, 8vw, 6rem);
+    top: -1rem;
+    right: clamp(0rem, 4vw, 3rem);
     z-index: 2;
+    pointer-events: none;
 
     @media all and ($viewport-type: $tablets) {
-      top: -1rem;
-      right: 1rem;
+      top: -0.5rem;
+      right: 0;
       transform: scale(0.7);
       transform-origin: top right;
     }
   }
 
-  &__calendar {
-    width: 100%;
+  &__title {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2rem;
+    text-align: left;
+    justify-self: end;
+
+    @media all and ($viewport-type: $tablets) {
+      align-items: center;
+      text-align: center;
+      justify-self: stretch;
+    }
   }
+
+  &__calendar {
+    justify-self: start;
+
+    @media all and ($viewport-type: $tablets) {
+      justify-self: center;
+    }
+  }
+}
+
+.c--ep-info-a {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  max-width: 26rem;
+
+  &__kicker {
+    font-family: $type-c;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: $pto-muted;
+    margin: 0;
+  }
+
+  &__title {
+    font-family: $type-a;
+    font-weight: 600;
+    font-size: clamp(1.25rem, 2vw, 1.5rem);
+    line-height: 1.15;
+    margin: 0;
+    color: $pto-fg;
+  }
+
+  &__date {
+    font-family: $type-b;
+    font-style: italic;
+    font-size: 0.95rem;
+    color: $pto-accent;
+    margin: 0;
+  }
+
+  &[data-state="empty"] {
+    .c--ep-info-a__title { color: $pto-muted; }
+    .c--ep-info-a__date  { color: $pto-muted; }
+  }
+  &[data-state="loading"] { opacity: 0.6; }
+  &[data-state="error"]   { .c--ep-info-a__title { color: #c00; } }
 }

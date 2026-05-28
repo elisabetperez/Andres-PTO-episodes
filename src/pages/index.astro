@@ -1,7 +1,7 @@
 ---
 import Layout from "@/components/Layout.astro";
 import Calendar from "@/components/Calendar.astro";
-import EpisodeHero from "@/components/EpisodeHero.astro";
+import ShowTitle from "@/components/ShowTitle.astro";
 import Sticker from "@/components/Sticker.astro";
 import { listEpisodes } from "@/lib/episodes";
 import { episodeLabel } from "@/lib/numbering";
@@ -19,20 +19,8 @@ const calendarMap = new Map(
   episodes.map((e) => [e.date, { title: e.title, label: episodeLabel(e.date, dates) ?? "" }])
 );
 const latest = episodes[episodes.length - 1] ?? null;
-
-const initial = latest
-  ? {
-      kicker: episodeLabel(latest.date, dates) ?? latest.date,
-      title: latest.title,
-      accent: formatDateEs(latest.date),
-      state: "filled" as const,
-    }
-  : {
-      kicker: "Sin episodios",
-      title: "Aún sin capítulos",
-      accent: "cuando Andrés cuente algo, aparece aquí",
-      state: "empty" as const,
-    };
+const latestLabel = latest ? (episodeLabel(latest.date, dates) ?? latest.date) : "";
+const latestDate = latest ? formatDateEs(latest.date) : "";
 ---
 
 <Layout variant="hero">
@@ -42,26 +30,26 @@ const initial = latest
     <span class="c--corner-a__line">Mayo 2026 — TBD</span>
   </div>
   <div class="c--corner-a c--corner-a--tr">
-    <span class="c--corner-a__line">El OOO de Andrés</span>
-    <span class="c--corner-a__line c--corner-a__accent">Temporada 1</span>
-    <span class="c--corner-a__line">{episodes.length}/35 capítulos</span>
-  </div>
-  <div class="c--corner-a c--corner-a--bl">
-    <span class="c--corner-a__line">®</span>
+    <span class="c--corner-a__line">Temporada 1</span>
+    <span class="c--corner-a__line c--corner-a__accent">{episodes.length}/35 capítulos</span>
+    <span class="c--corner-a__line">2026</span>
   </div>
   <div class="c--corner-a c--corner-a--br">
     <span class="c--corner-a__line">May 25 — Jun 30</span>
+    <span class="c--corner-a__line">®</span>
   </div>
 
   <div class="c--stage-a">
     <div class="c--stage-a__sticker"><Sticker /></div>
 
-    <EpisodeHero
-      kicker={initial.kicker}
-      title={initial.title}
-      accent={initial.accent}
-      state={initial.state}
-    />
+    <div class="c--stage-a__title">
+      <ShowTitle size="hero" accent="una sitcom diaria" />
+      <div class="c--ep-info-a" id="episode-info" data-state={latest ? "filled" : "empty"}>
+        <p class="c--ep-info-a__kicker" id="ep-kicker">{latest ? latestLabel : "Sin episodios"}</p>
+        <h2 class="c--ep-info-a__title" id="ep-title">{latest ? latest.title : "Aún sin capítulos"}</h2>
+        <p class="c--ep-info-a__date" id="ep-accent">{latestDate}</p>
+      </div>
+    </div>
 
     <div class="c--stage-a__calendar">
       <Calendar episodes={calendarMap} today={today} initialSelected={latest?.date} />
@@ -70,7 +58,7 @@ const initial = latest
 </Layout>
 
 <script>
-  const hero = document.getElementById("episode-hero")!;
+  const info = document.getElementById("episode-info")!;
   const kicker = document.getElementById("ep-kicker")!;
   const title = document.getElementById("ep-title")!;
   const accent = document.getElementById("ep-accent")!;
@@ -85,7 +73,7 @@ const initial = latest
 
   document.addEventListener("calendar:select", async (e) => {
     const detail = (e as CustomEvent).detail as { date: string; status: string; title: string; label: string };
-    hero.dataset.state = "loading";
+    info.dataset.state = "loading";
     kicker.textContent = detail.label || "Cargando";
     title.textContent = detail.title || "";
     accent.textContent = formatDate(detail.date);
@@ -95,18 +83,18 @@ const initial = latest
       if (!r.ok) throw new Error("fetch failed");
       const data = await r.json() as { episode: { date: string; title: string; summary: string } | null };
       if (data.episode) {
-        hero.dataset.state = "filled";
+        info.dataset.state = "filled";
         kicker.textContent = detail.label || `Episodio · ${data.episode.date}`;
         title.textContent = data.episode.title;
         accent.textContent = formatDate(data.episode.date);
       } else {
-        hero.dataset.state = "empty";
+        info.dataset.state = "empty";
         kicker.textContent = "Sin episodio";
         title.textContent = "Día en blanco";
         accent.textContent = formatDate(detail.date);
       }
     } catch (err) {
-      hero.dataset.state = "error";
+      info.dataset.state = "error";
       kicker.textContent = "Error";
       title.textContent = "No se pudo cargar";
       accent.textContent = "vuelve a intentarlo en un momento";

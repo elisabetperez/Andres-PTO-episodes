@@ -3,7 +3,7 @@
 .c--tab-a {
   position: fixed;
   bottom: 0;
-  right: clamp(1.5rem, 5vw, 3rem);
+  left: clamp(1.5rem, 5vw, 3rem);
   z-index: 5;
   display: inline-flex;
   align-items: center;
