@@ -121,6 +121,7 @@ const initialYm = initialSelectedSafe.slice(0, 7) || months[months.length - 1] |
       </div>
     </div>
   ))}
+  <div class="c--calendar-a__indicator" data-indicator aria-hidden="true"></div>
 </div>
 
 <script>
@@ -130,6 +131,7 @@ const initialYm = initialSelectedSafe.slice(0, 7) || months[months.length - 1] |
     const navigable: string[] = JSON.parse(root.dataset.navigable || "[]");
     const prevBtn = root.querySelector('[data-dir="-1"]') as HTMLButtonElement;
     const nextBtn = root.querySelector('[data-dir="1"]') as HTMLButtonElement;
+    const indicator = root.querySelector<HTMLElement>("[data-indicator]")!;
 
     let selectedDate = root.dataset.initialSelected || navigable[navigable.length - 1] || "";
 
@@ -148,14 +150,38 @@ const initialYm = initialSelectedSafe.slice(0, 7) || months[months.length - 1] |
       nextBtn.hidden = idx < 0 || idx >= navigable.length - 1;
     }
 
-    function selectDate(date: string, opts: { emit?: boolean } = { emit: true }) {
+    function positionIndicator(animate: boolean) {
+      const btn = findDayBtn(selectedDate);
+      if (!btn || btn.offsetParent === null) {
+        indicator.style.opacity = "0";
+        return;
+      }
+      const rootRect = root.getBoundingClientRect();
+      const cellRect = btn.getBoundingClientRect();
+      if (!animate) indicator.style.transition = "none";
+      indicator.style.top = `${cellRect.top - rootRect.top}px`;
+      indicator.style.left = `${cellRect.left - rootRect.left}px`;
+      indicator.style.width = `${cellRect.width}px`;
+      indicator.style.height = `${cellRect.height}px`;
+      indicator.style.opacity = "1";
+      if (!animate) {
+        // Force reflow then restore transition for future moves.
+        void indicator.offsetWidth;
+        indicator.style.transition = "";
+      }
+    }
+
+    function selectDate(date: string, opts: { emit?: boolean; animate?: boolean } = {}) {
+      const emit = opts.emit ?? true;
+      const animate = opts.animate ?? true;
       selectedDate = date;
       showMonthOf(date);
       root.querySelectorAll(".is-selected").forEach((el) => el.classList.remove("is-selected"));
       const btn = findDayBtn(date);
       if (btn) {
         btn.classList.add("is-selected");
-        if (opts.emit) {
+        positionIndicator(animate);
+        if (emit) {
           root.dispatchEvent(new CustomEvent("calendar:select", {
             bubbles: true,
             detail: {
@@ -171,8 +197,15 @@ const initialYm = initialSelectedSafe.slice(0, 7) || months[months.length - 1] |
       updateNavVisibility();
     }
 
-    // Initial paint — show the month, set nav visibility. No event emit (server already rendered).
-    if (selectedDate) selectDate(selectedDate, { emit: false });
+    // Initial paint — instant (no transition) so it lands directly on the day.
+    if (selectedDate) selectDate(selectedDate, { emit: false, animate: false });
+
+    // Keep the indicator aligned when the viewport resizes (cells reflow).
+    let resizeTimer: number | undefined;
+    window.addEventListener("resize", () => {
+      window.clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(() => positionIndicator(false), 80);
+    });
 
     root.addEventListener("click", (e) => {
       const target = e.target as HTMLElement;

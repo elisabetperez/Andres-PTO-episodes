@@ -3,6 +3,26 @@
   gap: 0.75rem;
   width: 30rem;
   max-width: 100%;
+  position: relative;
+
+  &__indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border: 1px solid $pto-fg;
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0;
+    transition:
+      top 0.55s cubic-bezier(0.32, 0.72, 0.2, 1),
+      left 0.55s cubic-bezier(0.32, 0.72, 0.2, 1),
+      width 0.55s cubic-bezier(0.32, 0.72, 0.2, 1),
+      height 0.55s cubic-bezier(0.32, 0.72, 0.2, 1),
+      opacity 0.2s ease;
+    z-index: 1;
+  }
 
   &__nav {
     display: flex;
@@ -109,8 +129,8 @@
     }
 
     &.is-selected {
-      transform: scale(1.06);
-      box-shadow: 0 0 0 1px $pto-fg;
+      // The visual stroke is drawn by .c--calendar-a__indicator, which
+      // animates from cell to cell. Nothing extra needed here.
     }
   }
 }
