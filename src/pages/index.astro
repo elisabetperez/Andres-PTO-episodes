@@ -96,34 +96,26 @@ const latestDate = latest ? formatDateEs(latest.date) : "";
 
   document.addEventListener("calendar:select", async (e) => {
     const detail = (e as CustomEvent).detail as { date: string; status: string; title: string; label: string; theme: string };
-    info.dataset.state = "loading";
-    kicker.textContent = detail.label || "Cargando";
-    title.textContent = detail.title || "";
+    const isFilled = detail.status === "filled";
+    info.dataset.state = isFilled ? "filled" : "empty";
+    kicker.textContent = isFilled ? (detail.label || "Episodio") : "Sin episodio";
+    title.textContent = isFilled ? (detail.title || "") : "Día en blanco";
     accent.textContent = formatDate(detail.date);
     loadReactions(detail.date);
     loadComments(detail.date);
 
+    // Filled days: confirm against the server (in case the title changed).
+    if (!isFilled) return;
     try {
       const r = await fetch(`/api/episode?date=${encodeURIComponent(detail.date)}`);
-      if (!r.ok) throw new Error("fetch failed");
+      if (!r.ok) return;
       const data = await r.json() as { episode: { date: string; title: string; summary: string } | null };
       if (data.episode) {
-        info.dataset.state = "filled";
         kicker.textContent = detail.label || `Episodio · ${data.episode.date}`;
         title.textContent = data.episode.title;
         accent.textContent = formatDate(data.episode.date);
-      } else {
-        info.dataset.state = "empty";
-        kicker.textContent = "Sin episodio";
-        title.textContent = "Día en blanco";
-        accent.textContent = formatDate(detail.date);
       }
-    } catch (err) {
-      info.dataset.state = "error";
-      kicker.textContent = "Error";
-      title.textContent = "No se pudo cargar";
-      accent.textContent = "vuelve a intentarlo en un momento";
-    }
+    } catch {/* silent */}
   });
 
   // -------- Reactions --------
