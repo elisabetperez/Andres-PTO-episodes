@@ -1,6 +1,7 @@
 ---
 import Layout from "@/components/Layout.astro";
 import Calendar from "@/components/Calendar.astro";
+import ShowTitle from "@/components/ShowTitle.astro";
 import { listEpisodes } from "@/lib/episodes";
 import { episodeLabel } from "@/lib/numbering";
 
@@ -21,8 +22,8 @@ const latestLabel = latest ? (episodeLabel(latest.date, dates) ?? latest.date) :
 
 <Layout>
   <header class="c--page-a__header">
-    <h1 class="c--page-a__title">El PTO de Andrés</h1>
-    <p class="c--page-a__subtitle">Una sitcom diaria, en formato calendario.</p>
+    <ShowTitle text="El PTO de Andrés" size="medium" />
+    <p class="c--page-a__subtitle">Una sitcom diaria · capítulos como Friends</p>
   </header>
 
   <div class="c--home-a">

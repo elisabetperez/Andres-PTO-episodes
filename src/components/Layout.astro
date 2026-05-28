@@ -4,11 +4,15 @@ import "@/assets/sass/style.scss";
 type Props = {
   title?: string;
   description?: string;
+  variant?: "default" | "hero";
+  showFooter?: boolean;
 };
 
 const {
   title = "El PTO de Andrés",
   description = "El PTO de Andrés como capítulos de Friends.",
+  variant = "default",
+  showFooter = true,
 } = Astro.props;
 ---
 
@@ -22,12 +26,14 @@ const {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   </head>
   <body>
-    <main class="c--page-a">
+    <main class:list={["c--page-a", variant === "hero" && "is-hero"]}>
       <div class="c--page-a__inner">
         <slot />
-        <footer class="c--page-a__footer">
-          <a href="/admin">admin</a>
-        </footer>
+        {showFooter && (
+          <footer class="c--page-a__footer">
+            <a href="/admin">admin</a>
+          </footer>
+        )}
       </div>
     </main>
   </body>

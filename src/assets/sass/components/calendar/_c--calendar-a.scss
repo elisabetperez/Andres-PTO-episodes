@@ -1,15 +1,15 @@
 .c--calendar-a {
   display: grid;
-  gap: 1rem;
+  gap: 1.25rem;
   width: 100%;
-  max-width: 28rem;
+  max-width: 38rem;
 
   &__nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.25rem;
   }
 
   &__navbtn {
@@ -17,10 +17,10 @@
     background: transparent;
     border: 1px solid $color-c;
     border-radius: 999px;
-    width: 2rem;
-    height: 2rem;
+    width: 2.4rem;
+    height: 2.4rem;
     font-family: $type-c;
-    font-size: 0.875rem;
+    font-size: 1rem;
     cursor: pointer;
     color: $color-c;
     transition: background 0.15s ease, color 0.15s ease;
@@ -37,7 +37,7 @@
 
   &__title {
     font-family: $type-a;
-    font-size: 1.15rem;
+    font-size: 1.5rem;
     margin: 0;
     font-weight: 600;
     text-align: center;
@@ -52,9 +52,9 @@
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     font-family: $type-c;
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.15em;
     color: $color-d;
     margin-bottom: 0.5rem;
     text-align: center;
@@ -63,7 +63,7 @@
   &__grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 6px;
+    gap: 8px;
   }
 
   &__cell {
@@ -73,13 +73,13 @@
     justify-content: center;
     text-decoration: none;
     color: $color-c;
-    border: 1px solid transparent;
+    border: 2px solid transparent;
     font-family: $type-b;
-    font-size: 0.875rem;
-    border-radius: 4px;
+    font-size: 1.05rem;
+    border-radius: 50%;
     background: transparent;
     cursor: pointer;
-    transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+    transition: background 0.15s ease, border-color 0.15s ease, transform 0.12s ease;
 
     &.is-blank {
       visibility: hidden;
@@ -118,8 +118,8 @@
     }
 
     &.is-selected {
-      transform: scale(1.05);
-      box-shadow: 0 0 0 2px $color-c;
+      transform: scale(1.08);
+      box-shadow: 0 0 0 3px $color-c;
     }
   }
 }

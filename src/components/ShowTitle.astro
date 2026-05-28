@@ -1,0 +1,23 @@
+---
+// Title with Friends-style colored dots between words.
+// Renders e.g. "EL · PTO · DE · ANDRÉS" where each · is a colored dot.
+
+type Props = {
+  text?: string;
+  size?: "hero" | "medium";
+};
+const { text = "EL PTO DE ANDRÉS", size = "hero" } = Astro.props;
+const words = text.toUpperCase().split(/\s+/);
+const dotColors = ["#e74c3c", "#f5d76e", "#3498db", "#2ecc71"];
+---
+
+<h1 class={`c--show-title-a c--show-title-a--${size}`}>
+  {words.map((w, i) => (
+    <>
+      <span class="c--show-title-a__word">{w}</span>
+      {i < words.length - 1 && (
+        <span class="c--show-title-a__dot" style={`background:${dotColors[i % dotColors.length]}`} aria-hidden="true"></span>
+      )}
+    </>
+  ))}
+</h1>
