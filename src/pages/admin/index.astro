@@ -46,28 +46,10 @@ function nameOnly(email: string): string {
         <a class="c--admin-a__btn is-ghost" href="/">← Volver</a>
       </div>
 
-      <section class="c--admin-a__section">
-        <h2 class="c--admin-a__h2">Accesos</h2>
-        <p class="c--admin-a__hint">
-          {uniqueEmails.size === 0
-            ? "Aún nadie ha entrado."
-            : `${uniqueEmails.size} ${uniqueEmails.size === 1 ? "persona" : "personas"} distintas han entrado · últimos ${logins.length} eventos:`}
-        </p>
-        {logins.length > 0 && (
-          <ul class="c--admin-a__logins">
-            {logins.map((ev) => (
-              <li>
-                <strong>{nameOnly(ev.email)}</strong>
-                <span class="c--admin-a__email">{ev.email}</span>
-                <span class="c--admin-a__when">{fmtWhen.format(new Date(ev.at))}</span>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
-
-      <h2 class="c--admin-a__h2">Editar capítulo</h2>
-      <form id="episode-form" class="c--admin-a__form">
+      <div class="c--admin-a__grid">
+        <div class="c--admin-a__col">
+          <h2 class="c--admin-a__h2">Editar capítulo</h2>
+          <form id="episode-form" class="c--admin-a__form">
         <label class="c--admin-a__field">
           <span>Fecha</span>
           <input
@@ -138,6 +120,28 @@ function nameOnly(email: string): string {
           location.reload();
         });
       </script>
+        </div>
+
+        <aside class="c--admin-a__col">
+          <h2 class="c--admin-a__h2">Accesos</h2>
+          <p class="c--admin-a__hint">
+            {uniqueEmails.size === 0
+              ? "Aún nadie ha entrado."
+              : `${uniqueEmails.size} ${uniqueEmails.size === 1 ? "persona" : "personas"} · últimos ${logins.length} eventos:`}
+          </p>
+          {logins.length > 0 && (
+            <ul class="c--admin-a__logins">
+              {logins.map((ev) => (
+                <li>
+                  <strong>{nameOnly(ev.email)}</strong>
+                  <span class="c--admin-a__email">{ev.email}</span>
+                  <span class="c--admin-a__when">{fmtWhen.format(new Date(ev.at))}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </aside>
+      </div>
     </div>
   </Layout>
 )}

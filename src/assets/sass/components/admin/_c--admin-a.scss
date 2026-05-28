@@ -1,6 +1,22 @@
 .c--admin-a {
-  max-width: 36rem;
+  max-width: 64rem;
   color: $pto-fg;
+
+  &__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 2.5rem;
+    align-items: start;
+
+    @media all and ($viewport-type: $tablets) {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+  }
+
+  &__col {
+    min-width: 0;
+  }
 
   &__form {
     display: grid;
