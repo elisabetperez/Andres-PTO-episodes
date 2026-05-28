@@ -1,0 +1,51 @@
+.c--episode-panel-a {
+  border-left: 2px solid $color-c;
+  padding: 0.25rem 0 0.25rem 1.5rem;
+  min-height: 8rem;
+
+  @media all and ($viewport-type: $tablets) {
+    border-left: none;
+    border-top: 1px solid $color-d;
+    padding: 1.5rem 0 0;
+  }
+
+  &__kicker {
+    font-family: $type-c;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: $color-d;
+    margin: 0 0 0.5rem;
+  }
+
+  &__title {
+    font-family: $type-a;
+    font-size: clamp(1.5rem, 3.5vw, 2.25rem);
+    line-height: 1.15;
+    margin: 0 0 1rem;
+    font-weight: 700;
+  }
+
+  &__summary {
+    font-family: $type-b;
+    font-size: 1.05rem;
+    line-height: 1.5;
+    color: $color-c;
+    margin: 0;
+    max-width: 36rem;
+  }
+
+  &[data-state="empty"],
+  &[data-state="loading"] {
+    .c--episode-panel-a__title,
+    .c--episode-panel-a__summary {
+      color: $color-d;
+    }
+  }
+
+  &[data-state="error"] {
+    .c--episode-panel-a__title {
+      color: #c00;
+    }
+  }
+}

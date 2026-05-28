@@ -1,0 +1,11 @@
+.c--home-a {
+  display: grid;
+  gap: 3rem;
+  grid-template-columns: minmax(0, 28rem) minmax(0, 1fr);
+  align-items: start;
+
+  @media all and ($viewport-type: $tablets) {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}

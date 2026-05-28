@@ -11,8 +11,7 @@ const allDates = SEASONS.flatMap((s) => daysInSeason(s.id));
 ---
 
 <Layout title="Admin · El PTO de Andrés">
-  <section class="o--section">
-    <h1>Admin</h1>
+  <h1 class="c--page-a__title">Admin</h1>
 
     {!isAuthed ? (
       <form id="login-form">
@@ -140,5 +139,4 @@ const allDates = SEASONS.flatMap((s) => daysInSeason(s.id));
         });
       </script>
     )}
-  </section>
 </Layout>

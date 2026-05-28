@@ -2,7 +2,7 @@
 import { SEASONS, isInAnySeason } from "@/config/seasons";
 
 type Props = {
-  episodes: ReadonlyMap<string, string>; // date → title (for hover label)
+  episodes: ReadonlyMap<string, string>; // date → title
   today: string; // YYYY-MM-DD
 };
 
@@ -14,45 +14,56 @@ const MONTHS_ES = [
 ];
 const DOW_ES = ["L", "M", "X", "J", "V", "S", "D"];
 
-// Build month buckets from seasons (unique months across all seasons)
-const monthsSet = new Set<string>();
+// All months covered by seasons.
+const allMonthsSet = new Set<string>();
 for (const s of SEASONS) {
   const start = new Date(s.start + "T00:00:00Z");
   const end = new Date(s.end + "T00:00:00Z");
   const cur = new Date(Date.UTC(start.getUTCFullYear(), start.getUTCMonth(), 1));
   while (cur <= end) {
-    monthsSet.add(`${cur.getUTCFullYear()}-${String(cur.getUTCMonth() + 1).padStart(2, "0")}`);
+    allMonthsSet.add(`${cur.getUTCFullYear()}-${String(cur.getUTCMonth() + 1).padStart(2, "0")}`);
     cur.setUTCMonth(cur.getUTCMonth() + 1);
   }
 }
-const months = [...monthsSet].sort();
+
+// Only include months whose first day has already arrived (≤ today).
+const todayYm = today.slice(0, 7);
+const months = [...allMonthsSet].sort().filter((ym) => ym <= todayYm);
 
 function buildMonth(ym: string) {
   const [y, m] = ym.split("-").map(Number);
   const first = new Date(Date.UTC(y, m - 1, 1));
   const last = new Date(Date.UTC(y, m, 0));
-  // Monday-first week index: Mon=0..Sun=6
   const startOffset = (first.getUTCDay() + 6) % 7;
-  type Status = "outside-month" | "outside-season" | "empty" | "filled";
+  type Status = "outside-month" | "outside-season" | "future" | "empty" | "filled";
   const cells: Array<{ date: string | null; status: Status; isToday: boolean }> = [];
   for (let i = 0; i < startOffset; i++) cells.push({ date: null, status: "outside-month", isToday: false });
   for (let d = 1; d <= last.getUTCDate(); d++) {
     const iso = `${y}-${String(m).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
     let status: Status;
-    if (!isInAnySeason(iso)) status = "outside-season";
+    if (iso > today) status = "future";
+    else if (!isInAnySeason(iso)) status = "outside-season";
     else if (episodes.has(iso)) status = "filled";
     else status = "empty";
     cells.push({ date: iso, status, isToday: iso === today });
   }
-  return { name: `${MONTHS_ES[m - 1]} ${y}`, cells };
+  return { ym, name: `${MONTHS_ES[m - 1]} ${y}`, cells };
 }
 const monthData = months.map(buildMonth);
+
+// Default month: the one matching today.
+const initialYm = months.find((ym) => ym === todayYm) ?? months[months.length - 1];
 ---
 
-<div class="c--calendar-a">
+<div class="c--calendar-a" data-initial-month={initialYm}>
+  <div class="c--calendar-a__nav">
+    <button type="button" class="c--calendar-a__navbtn" data-dir="-1" aria-label="Mes anterior">←</button>
+    <h3 class="c--calendar-a__title" data-title-target></h3>
+    <button type="button" class="c--calendar-a__navbtn" data-dir="1" aria-label="Mes siguiente">→</button>
+  </div>
+
   {monthData.map((mo) => (
-    <div class="c--calendar-a__month">
-      <h3 class="c--calendar-a__title">{mo.name}</h3>
+    <div class="c--calendar-a__month" data-month={mo.ym} hidden={mo.ym !== initialYm}>
       <div class="c--calendar-a__dow">
         {DOW_ES.map((d) => <span>{d}</span>)}
       </div>
@@ -65,13 +76,74 @@ const monthData = months.map(buildMonth);
             cell.isToday ? "is-today" : "",
           ].filter(Boolean).join(" ");
           const day = Number(cell.date.slice(8));
-          if (cell.status === "outside-season") {
+          if (cell.status === "outside-season" || cell.status === "future") {
             return <span class={cls}>{day}</span>;
           }
           const title = cell.status === "filled" ? episodes.get(cell.date) : "Sin episodio";
-          return <a class={cls} href={`/e/${cell.date}`} title={title}>{day}</a>;
+          return (
+            <button
+              type="button"
+              class={cls}
+              data-date={cell.date}
+              data-title={title}
+              data-status={cell.status}
+            >{day}</button>
+          );
         })}
       </div>
     </div>
   ))}
 </div>
+
+<script>
+  const root = document.querySelector(".c--calendar-a") as HTMLElement;
+  if (root) {
+    const titleEl = root.querySelector("[data-title-target]") as HTMLElement;
+    const monthEls = Array.from(root.querySelectorAll<HTMLElement>("[data-month]"));
+    const monthYms = monthEls.map((el) => el.dataset.month!);
+    let currentIdx = monthYms.indexOf(root.dataset.initialMonth!);
+    if (currentIdx < 0) currentIdx = 0;
+    const NAMES = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+
+    function showMonth(idx: number) {
+      monthEls.forEach((el, i) => {
+        el.hidden = i !== idx;
+      });
+      const ym = monthYms[idx];
+      const [y, m] = ym.split("-").map(Number);
+      titleEl.textContent = `${NAMES[m - 1]} ${y}`;
+
+      const prev = root.querySelector('[data-dir="-1"]') as HTMLButtonElement;
+      const next = root.querySelector('[data-dir="1"]') as HTMLButtonElement;
+      prev.disabled = idx === 0;
+      next.disabled = idx === monthYms.length - 1;
+    }
+    showMonth(currentIdx);
+
+    root.addEventListener("click", (e) => {
+      const target = e.target as HTMLElement;
+      const navBtn = target.closest<HTMLButtonElement>("[data-dir]");
+      if (navBtn && !navBtn.disabled) {
+        const dir = Number(navBtn.dataset.dir);
+        const next = Math.max(0, Math.min(monthYms.length - 1, currentIdx + dir));
+        if (next !== currentIdx) {
+          currentIdx = next;
+          showMonth(currentIdx);
+        }
+        return;
+      }
+
+      const dayBtn = target.closest<HTMLButtonElement>("[data-date]");
+      if (dayBtn) {
+        const date = dayBtn.dataset.date!;
+        const status = dayBtn.dataset.status!;
+        root.dispatchEvent(new CustomEvent("calendar:select", {
+          bubbles: true,
+          detail: { date, status, title: dayBtn.dataset.title ?? "" },
+        }));
+        root.querySelectorAll(".is-selected").forEach((el) => el.classList.remove("is-selected"));
+        dayBtn.classList.add("is-selected");
+      }
+    });
+  }
+</script>

@@ -27,21 +27,19 @@ const label = episodeLabel(date, allDates);
 ---
 
 <Layout title={episode ? `${episode.title} · El PTO de Andrés` : `Sin episodio · ${date}`}>
-  <section class="o--section">
-    <p><a href="/">← Volver al calendario</a></p>
-    <p>
-      <small>{label ?? season.label} · {date}</small>
-    </p>
-    {episode ? (
-      <article>
-        <h1>{episode.title}</h1>
-        <p>{episode.summary}</p>
-      </article>
-    ) : (
-      <article>
-        <h1>Sin episodio</h1>
-        <p>Este día está en el rango del PTO pero todavía no hay entrada.</p>
-      </article>
-    )}
-  </section>
+  <p><a href="/">← Volver al calendario</a></p>
+  <p>
+    <small>{label ?? season.label} · {date}</small>
+  </p>
+  {episode ? (
+    <article>
+      <h1 class="c--page-a__title">{episode.title}</h1>
+      <p>{episode.summary}</p>
+    </article>
+  ) : (
+    <article>
+      <h1 class="c--page-a__title">Sin episodio</h1>
+      <p>Este día está en el rango del PTO pero todavía no hay entrada.</p>
+    </article>
+  )}
 </Layout>

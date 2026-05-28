@@ -1,27 +1,70 @@
 .c--calendar-a {
   display: grid;
-  gap: 2rem;
+  gap: 1rem;
+  width: 100%;
+  max-width: 28rem;
+
+  &__nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  &__navbtn {
+    appearance: none;
+    background: transparent;
+    border: 1px solid $color-c;
+    border-radius: 999px;
+    width: 2rem;
+    height: 2rem;
+    font-family: $type-c;
+    font-size: 0.875rem;
+    cursor: pointer;
+    color: $color-c;
+    transition: background 0.15s ease, color 0.15s ease, opacity 0.15s ease;
+
+    &:hover:not(:disabled) {
+      background: $color-c;
+      color: $color-a;
+    }
+
+    &:disabled {
+      opacity: 0.25;
+      cursor: not-allowed;
+    }
+  }
 
   &__title {
     font-family: $type-a;
-    font-size: 1.25rem;
-    margin: 0 0 0.5rem;
+    font-size: 1.15rem;
+    margin: 0;
+    font-weight: 600;
+    text-align: center;
+    flex: 1;
+  }
+
+  &__month[hidden] {
+    display: none;
   }
 
   &__dow {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     font-family: $type-c;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
     color: $color-d;
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.5rem;
     text-align: center;
   }
 
   &__grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 4px;
+    gap: 6px;
   }
 
   &__cell {
@@ -34,29 +77,50 @@
     border: 1px solid transparent;
     font-family: $type-b;
     font-size: 0.875rem;
+    border-radius: 4px;
+    background: transparent;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
 
     &.is-blank {
       visibility: hidden;
     }
 
-    &.is-outside-season {
+    &.is-outside-season,
+    &.is-future {
       color: $color-d;
-      opacity: 0.4;
+      opacity: 0.2;
       pointer-events: none;
+      cursor: default;
     }
 
     &.is-empty {
       background: rgba(0, 0, 0, 0.04);
+      color: $color-d;
+
+      &:hover {
+        background: rgba(0, 0, 0, 0.08);
+      }
     }
 
     &.is-filled {
       background: $color-b;
       font-weight: 600;
+      color: $color-c;
+
+      &:hover {
+        background: darken($color-b, 6%);
+      }
     }
 
     &.is-today {
       border-color: $color-c;
       font-weight: 700;
+    }
+
+    &.is-selected {
+      transform: scale(1.05);
+      box-shadow: 0 0 0 2px $color-c;
     }
   }
 }
