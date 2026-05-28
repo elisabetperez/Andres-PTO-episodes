@@ -75,7 +75,7 @@ export const POST: APIRoute = async ({ request, clientAddress, cookies }) => {
   const token = signSession({ exp: Date.now() + SESSION_TTL_MS }, secret);
   cookies.set("pto_session", token, {
     httpOnly: true,
-    secure: true,
+    secure: !import.meta.env.DEV, // permitir cookie sobre http://localhost en dev
     sameSite: "strict",
     path: "/",
     maxAge: SESSION_TTL_MS / 1000,
