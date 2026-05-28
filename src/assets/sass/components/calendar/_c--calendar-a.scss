@@ -1,8 +1,8 @@
 .c--calendar-a {
   display: grid;
-  gap: 1.25rem;
+  gap: 1.5rem;
   width: 100%;
-  max-width: 38rem;
+  max-width: 52rem;
 
   &__nav {
     display: flex;
@@ -37,7 +37,7 @@
 
   &__title {
     font-family: $type-a;
-    font-size: 1.5rem;
+    font-size: 1.75rem;
     margin: 0;
     font-weight: 600;
     text-align: center;
@@ -52,9 +52,9 @@
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     font-family: $type-c;
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     text-transform: uppercase;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.18em;
     color: $color-d;
     margin-bottom: 0.5rem;
     text-align: center;
@@ -63,7 +63,7 @@
   &__grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 8px;
+    gap: 10px;
   }
 
   &__cell {
@@ -73,9 +73,9 @@
     justify-content: center;
     text-decoration: none;
     color: $color-c;
-    border: 2px solid transparent;
+    border: 1px solid transparent;
     font-family: $type-b;
-    font-size: 1.05rem;
+    font-size: 1.25rem;
     border-radius: 50%;
     background: transparent;
     cursor: pointer;
@@ -94,32 +94,29 @@
     }
 
     &.is-empty {
-      background: rgba(0, 0, 0, 0.04);
       color: $color-d;
 
       &:hover {
-        background: rgba(0, 0, 0, 0.08);
+        background: rgba(0, 0, 0, 0.04);
       }
     }
 
     &.is-filled {
-      background: $color-b;
-      font-weight: 600;
+      font-weight: 700;
       color: $color-c;
 
       &:hover {
-        background: darken($color-b, 6%);
+        background: rgba(0, 0, 0, 0.04);
       }
     }
 
     &.is-today {
       border-color: $color-c;
-      font-weight: 700;
     }
 
     &.is-selected {
-      transform: scale(1.08);
-      box-shadow: 0 0 0 3px $color-c;
+      transform: scale(1.06);
+      box-shadow: 0 0 0 1px $color-c;
     }
   }
 }
