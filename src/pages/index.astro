@@ -47,13 +47,13 @@ const latestDate = latest ? formatDateEs(latest.date) : "";
     </div>
 
     <div class="c--stage-a__body">
+      <Calendar episodes={calendarMap} today={today} initialSelected={latest?.date} />
+
       <div class="c--ep-info-a" id="episode-info" data-state={latest ? "filled" : "empty"}>
         <p class="c--ep-info-a__kicker" id="ep-kicker">{latest ? latestLabel : "Sin episodios"}</p>
         <h2 class="c--ep-info-a__title" id="ep-title">{latest ? latest.title : "Aún sin capítulos"}</h2>
         <p class="c--ep-info-a__date" id="ep-accent">{latestDate}</p>
       </div>
-
-      <Calendar episodes={calendarMap} today={today} initialSelected={latest?.date} />
     </div>
   </div>
 </Layout>
