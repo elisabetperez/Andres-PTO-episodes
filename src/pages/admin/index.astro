@@ -8,6 +8,10 @@ const secret = import.meta.env.SESSION_SECRET;
 const isAuthed = !!(token && secret && verifySession(token, secret));
 
 const allDates = isAuthed ? SEASONS.flatMap((s) => daysInSeason(s.id)) : [];
+const minDate = allDates[0] ?? "";
+const maxDate = allDates[allDates.length - 1] ?? "";
+const today = new Date().toISOString().slice(0, 10);
+const initialDate = allDates.includes(today) ? today : maxDate;
 ---
 
 <Layout title="Admin · El PTO de Andrés">
@@ -18,76 +22,51 @@ const allDates = isAuthed ? SEASONS.flatMap((s) => daysInSeason(s.id)) : [];
     </div>
 
     {!isAuthed ? (
-      <form id="login-form" class="c--admin-a__form">
+      <div class="c--admin-a__form">
+        <p>Sólo el admin de la sitcom puede entrar.</p>
+        <div class="c--admin-a__actions">
+          <a class="c--admin-a__btn" href="/api/auth/google/start">Iniciar sesión con Google</a>
+        </div>
+      </div>
+    ) : (
+      <form id="episode-form" class="c--admin-a__form">
         <label class="c--admin-a__field">
-          <span>Contraseña</span>
-          <input class="c--admin-a__input" type="password" name="password" required autofocus />
+          <span>Fecha</span>
+          <input
+            class="c--admin-a__input"
+            type="date"
+            name="date"
+            required
+            min={minDate}
+            max={maxDate}
+            value={initialDate}
+          />
+        </label>
+        <label class="c--admin-a__field">
+          <span>Título</span>
+          <input class="c--admin-a__input" type="text" name="title" required maxlength="200" placeholder="🏖️ El que..." />
         </label>
         <div class="c--admin-a__actions">
-          <button class="c--admin-a__btn" type="submit">Entrar</button>
-          <p id="login-error" class="c--admin-a__status is-error" role="alert"></p>
+          <button class="c--admin-a__btn" type="submit">Guardar</button>
+          <button class="c--admin-a__btn is-ghost" type="button" id="logout-btn">Cerrar sesión</button>
+          <p id="episode-status" class="c--admin-a__status" role="status"></p>
         </div>
-      </form>
-    ) : (
-      <>
-        <form id="episode-form" class="c--admin-a__form">
-          <label class="c--admin-a__field">
-            <span>Fecha</span>
-            <select class="c--admin-a__select" name="date" required>
-              {allDates.map((d) => <option value={d}>{d}</option>)}
-            </select>
-          </label>
-          <label class="c--admin-a__field">
-            <span>Título</span>
-            <input class="c--admin-a__input" type="text" name="title" required maxlength="200" placeholder="🏖️ El que..." />
-          </label>
-          <label class="c--admin-a__field">
-            <span>Resumen <small id="word-count">(0/15 palabras · opcional)</small></span>
-            <textarea class="c--admin-a__textarea" name="summary" rows="3" maxlength="400"></textarea>
-          </label>
-          <div class="c--admin-a__actions">
-            <button class="c--admin-a__btn" type="submit">Guardar</button>
-            <button class="c--admin-a__btn is-ghost" type="button" id="logout-btn">Cerrar sesión</button>
-            <p id="episode-status" class="c--admin-a__status" role="status"></p>
-          </div>
-        </form>
 
         <script>
           const form = document.getElementById("episode-form") as HTMLFormElement;
-          const summary = form.querySelector('textarea[name="summary"]') as HTMLTextAreaElement;
-          const count = document.getElementById("word-count")!;
           const status = document.getElementById("episode-status")!;
-          const dateSel = form.querySelector('select[name="date"]') as HTMLSelectElement;
+          const dateSel = form.querySelector('input[name="date"]') as HTMLInputElement;
           const titleInput = form.querySelector('input[name="title"]') as HTMLInputElement;
-
-          function wc(s: string): number {
-            const t = s.trim();
-            return t ? t.split(/\s+/).length : 0;
-          }
-          function refreshCount() {
-            const n = wc(summary.value);
-            count.textContent = `(${n}/15 palabras · opcional)`;
-            (count as HTMLElement).style.color = n > 15 ? "#c00" : "";
-          }
-          summary.addEventListener("input", refreshCount);
 
           async function loadExisting() {
             try {
               const r = await fetch(`/api/episode?date=${encodeURIComponent(dateSel.value)}`);
               if (!r.ok) throw new Error("fetch failed");
               const data = await r.json();
-              if (data.episode) {
-                titleInput.value = data.episode.title ?? "";
-                summary.value = data.episode.summary ?? "";
-              } else {
-                titleInput.value = "";
-                summary.value = "";
-              }
+              titleInput.value = data.episode?.title ?? "";
             } catch {
               titleInput.value = "";
-              summary.value = "";
             }
-            refreshCount();
           }
           dateSel.addEventListener("change", loadExisting);
           loadExisting();
@@ -99,7 +78,7 @@ const allDates = isAuthed ? SEASONS.flatMap((s) => daysInSeason(s.id)) : [];
             const body = {
               date: dateSel.value,
               title: titleInput.value,
-              summary: summary.value,
+              summary: "",
             };
             const r = await fetch("/api/episode", {
               method: "PUT",
@@ -121,30 +100,7 @@ const allDates = isAuthed ? SEASONS.flatMap((s) => daysInSeason(s.id)) : [];
             location.reload();
           });
         </script>
-      </>
-    )}
-
-    {!isAuthed && (
-      <script>
-        const f = document.getElementById("login-form") as HTMLFormElement;
-        const err = document.getElementById("login-error")!;
-        f.addEventListener("submit", async (e) => {
-          e.preventDefault();
-          err.textContent = "";
-          const pw = (f.elements.namedItem("password") as HTMLInputElement).value;
-          const r = await fetch("/api/login", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ password: pw }),
-          });
-          if (r.ok) {
-            location.reload();
-          } else {
-            const data = await r.json().catch(() => ({}));
-            err.textContent = data.error ?? "Error";
-          }
-        });
-      </script>
+      </form>
     )}
   </div>
 </Layout>
