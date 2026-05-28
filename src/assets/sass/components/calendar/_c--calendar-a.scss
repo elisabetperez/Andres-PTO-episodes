@@ -16,11 +16,12 @@
     appearance: none;
     background: transparent;
     border: 1px solid $pto-fg;
-    border-radius: 999px;
-    width: 1.85rem;
-    height: 1.85rem;
+    border-radius: 50%;
+    width: 2.6rem;
+    height: 2.6rem;
+    aspect-ratio: 1;
     font-family: $type-c;
-    font-size: 0.8rem;
+    font-size: 1.1rem;
     cursor: pointer;
     color: $pto-fg;
     transition: background 0.15s ease, color 0.15s ease;
