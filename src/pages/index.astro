@@ -44,14 +44,15 @@ const latestDate = latest ? formatDateEs(latest.date) : "";
 
     <div class="c--stage-a__title">
       <ShowTitle size="hero" accent="una sitcom diaria" />
+    </div>
+
+    <div class="c--stage-a__body">
       <div class="c--ep-info-a" id="episode-info" data-state={latest ? "filled" : "empty"}>
         <p class="c--ep-info-a__kicker" id="ep-kicker">{latest ? latestLabel : "Sin episodios"}</p>
         <h2 class="c--ep-info-a__title" id="ep-title">{latest ? latest.title : "Aún sin capítulos"}</h2>
         <p class="c--ep-info-a__date" id="ep-accent">{latestDate}</p>
       </div>
-    </div>
 
-    <div class="c--stage-a__calendar">
       <Calendar episodes={calendarMap} today={today} initialSelected={latest?.date} />
     </div>
   </div>
