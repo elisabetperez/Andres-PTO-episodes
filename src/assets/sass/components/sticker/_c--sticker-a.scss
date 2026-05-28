@@ -1,0 +1,54 @@
+@keyframes pto-sticker-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.c--sticker-a {
+  position: relative;
+  width: clamp(5.5rem, 9vw, 8rem);
+  height: clamp(5.5rem, 9vw, 8rem);
+  display: inline-block;
+
+  &__svg {
+    width: 100%;
+    height: 100%;
+    animation: pto-sticker-spin 18s linear infinite;
+  }
+
+  &__text {
+    fill: $pto-fg;
+    font-family: $type-c;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  &__face {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: 40%;
+    height: 40%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    place-items: center;
+    gap: 4px 8px;
+  }
+
+  &__eye {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: $pto-fg;
+  }
+
+  &__mouth {
+    grid-column: 1 / -1;
+    width: 60%;
+    height: 8px;
+    border: 2px solid $pto-fg;
+    border-top: none;
+    border-radius: 0 0 999px 999px;
+  }
+}

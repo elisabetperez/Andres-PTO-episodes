@@ -2,6 +2,7 @@
 import Layout from "@/components/Layout.astro";
 import Calendar from "@/components/Calendar.astro";
 import ShowTitle from "@/components/ShowTitle.astro";
+import Sticker from "@/components/Sticker.astro";
 import { listEpisodes } from "@/lib/episodes";
 import { episodeLabel } from "@/lib/numbering";
 
@@ -22,6 +23,7 @@ const latestLabel = latest ? (episodeLabel(latest.date, dates) ?? latest.date) :
 
 <Layout>
   <header class="c--page-a__header">
+    <div class="c--home-a__sticker"><Sticker /></div>
     <ShowTitle size="medium" accent="una sitcom diaria" />
     <p class="c--page-a__subtitle">Mayo 2026 — TBD</p>
   </header>

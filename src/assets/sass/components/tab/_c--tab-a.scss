@@ -1,0 +1,41 @@
+// Filing-cabinet style tab that sticks up from the bottom-right of the viewport.
+
+.c--tab-a {
+  position: fixed;
+  bottom: 0;
+  right: clamp(1.5rem, 5vw, 3rem);
+  z-index: 5;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: $pto-fg;
+  color: $pto-bg;
+  text-decoration: none;
+  font-family: $type-c;
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  padding: 0.75rem 1.5rem 1rem;
+  border-radius: 14px 14px 0 0;
+  box-shadow: 0 -4px 18px rgba(0, 0, 0, 0.08);
+  transition: transform 0.18s ease, background 0.18s ease;
+
+  &::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: $pto-accent;
+    display: inline-block;
+  }
+
+  &:hover {
+    transform: translateY(-3px);
+    background: $pto-accent;
+    color: $pto-bg;
+
+    &::before {
+      background: $pto-fg;
+    }
+  }
+}

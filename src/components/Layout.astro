@@ -9,8 +9,8 @@ type Props = {
 };
 
 const {
-  title = "El PTO de Andrés",
-  description = "El PTO de Andrés como capítulos de Friends.",
+  title = "El OOO de Andrés",
+  description = "El OOO de Andrés como capítulos de Friends.",
   variant = "default",
   showFooter = true,
 } = Astro.props;
@@ -30,9 +30,9 @@ const {
       <div class="c--page-a__inner">
         <slot />
         {showFooter && (
-          <footer class="c--page-a__footer">
-            <a href="/admin">admin</a>
-          </footer>
+          <a class="c--tab-a" href="/admin">
+            <span class="c--tab-a__label">Admin</span>
+          </a>
         )}
       </div>
     </main>

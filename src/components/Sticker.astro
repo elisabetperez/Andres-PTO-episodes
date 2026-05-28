@@ -1,0 +1,24 @@
+---
+// Spinning round sticker with text along the edge + smiley in the middle.
+
+type Props = {
+  text?: string;
+};
+const { text = "EL · OOO · DE · ANDRÉS · TEMPORADA 1 · " } = Astro.props;
+---
+
+<div class="c--sticker-a" aria-hidden="true">
+  <svg viewBox="0 0 120 120" class="c--sticker-a__svg">
+    <defs>
+      <path id="sticker-circle" d="M 60,60 m -46,0 a 46,46 0 1,1 92,0 a 46,46 0 1,1 -92,0" />
+    </defs>
+    <text class="c--sticker-a__text">
+      <textPath href="#sticker-circle" startOffset="0">{text.repeat(3)}</textPath>
+    </text>
+  </svg>
+  <span class="c--sticker-a__face">
+    <span class="c--sticker-a__eye c--sticker-a__eye--l"></span>
+    <span class="c--sticker-a__eye c--sticker-a__eye--r"></span>
+    <span class="c--sticker-a__mouth"></span>
+  </span>
+</div>

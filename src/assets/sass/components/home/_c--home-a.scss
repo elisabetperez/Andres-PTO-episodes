@@ -11,4 +11,11 @@
     gap: 1.5rem;
     align-items: start;
   }
+
+  &__sticker {
+    position: absolute;
+    top: 4rem;
+    right: clamp(2rem, 6vw, 5rem);
+    z-index: 2;
+  }
 }
