@@ -60,6 +60,21 @@ const latestDate = latest ? formatDateEs(latest.date) : "";
             </div>
           </div>
         </div>
+
+        <div class="c--comments-a" id="comments" data-date={latest?.date ?? ""}>
+          <div class="c--comments-a__list" id="comments-list"></div>
+          <form class="c--comments-a__form" id="comments-form">
+            <input
+              class="c--comments-a__input"
+              type="text"
+              name="text"
+              maxlength="280"
+              placeholder="Comentar..."
+              autocomplete="off"
+            />
+            <button class="c--comments-a__submit" type="submit">Enviar</button>
+          </form>
+        </div>
       </div>
     </div>
   </div>
@@ -86,6 +101,7 @@ const latestDate = latest ? formatDateEs(latest.date) : "";
     title.textContent = detail.title || "";
     accent.textContent = formatDate(detail.date);
     loadReactions(detail.date);
+    loadComments(detail.date);
 
     try {
       const r = await fetch(`/api/episode?date=${encodeURIComponent(detail.date)}`);
@@ -194,4 +210,101 @@ const latestDate = latest ? formatDateEs(latest.date) : "";
   });
 
   if (currentDate) loadReactions(currentDate);
+
+  // -------- Comments --------
+  const commentsRoot = document.getElementById("comments")!;
+  const commentsList = document.getElementById("comments-list")!;
+  const commentsForm = document.getElementById("comments-form") as HTMLFormElement;
+  const commentsInput = commentsForm.querySelector("input[name='text']") as HTMLInputElement;
+
+  type Comment = { id: string; author: string; text: string; createdAt: string };
+
+  function fmtTime(iso: string): string {
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return "";
+    return d.toLocaleString("es-ES", { hour: "2-digit", minute: "2-digit", day: "2-digit", month: "short" });
+  }
+
+  function renderComments(comments: Comment[]) {
+    commentsList.innerHTML = "";
+    for (const c of comments) {
+      const item = document.createElement("div");
+      item.className = "c--comments-a__item";
+      const author = document.createElement("span");
+      author.className = "c--comments-a__author";
+      author.textContent = nameOnly(c.author);
+      const text = document.createElement("span");
+      text.className = "c--comments-a__text";
+      text.textContent = c.text;
+      const time = document.createElement("span");
+      time.className = "c--comments-a__time";
+      time.textContent = fmtTime(c.createdAt);
+      item.append(author, text, time);
+      if (c.author === myEmail) {
+        const del = document.createElement("button");
+        del.type = "button";
+        del.className = "c--comments-a__delete";
+        del.dataset.id = c.id;
+        del.textContent = "Borrar";
+        item.append(del);
+      }
+      commentsList.append(item);
+    }
+    commentsList.scrollTop = commentsList.scrollHeight;
+  }
+
+  async function loadComments(date: string) {
+    commentsRoot.dataset.date = date;
+    if (!date) return renderComments([]);
+    try {
+      const r = await fetch(`/api/comments?date=${encodeURIComponent(date)}`);
+      if (!r.ok) throw new Error("fetch failed");
+      const data = await r.json() as { comments: Comment[]; me: string };
+      myEmail = data.me;
+      renderComments(data.comments);
+    } catch {
+      renderComments([]);
+    }
+  }
+
+  commentsForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const text = commentsInput.value.trim();
+    const date = commentsRoot.dataset.date;
+    if (!text || !date) return;
+    const submit = commentsForm.querySelector(".c--comments-a__submit") as HTMLButtonElement;
+    submit.disabled = true;
+    try {
+      const r = await fetch("/api/comments", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ date, text }),
+      });
+      if (r.ok) {
+        const data = await r.json() as { comments: Comment[]; me: string };
+        myEmail = data.me;
+        renderComments(data.comments);
+        commentsInput.value = "";
+      }
+    } catch {/* silent */}
+    submit.disabled = false;
+    commentsInput.focus();
+  });
+
+  commentsList.addEventListener("click", async (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>(".c--comments-a__delete");
+    if (!btn) return;
+    const date = commentsRoot.dataset.date;
+    const id = btn.dataset.id;
+    if (!date || !id) return;
+    const r = await fetch(`/api/comments?date=${encodeURIComponent(date)}&id=${encodeURIComponent(id)}`, {
+      method: "DELETE",
+    });
+    if (r.ok) {
+      const data = await r.json() as { comments: Comment[]; me: string };
+      renderComments(data.comments);
+    }
+  });
+
+  if (currentDate) loadComments(currentDate);
 </script>

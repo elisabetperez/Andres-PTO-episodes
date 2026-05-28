@@ -1,0 +1,112 @@
+.c--comments-a {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin-top: 1.25rem;
+  max-width: 26rem;
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-height: 14rem;
+    overflow-y: auto;
+    padding-right: 0.25rem;
+  }
+
+  &__item {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 0.5rem;
+    align-items: baseline;
+    padding: 0.5rem 0.7rem;
+    background: rgba(40, 24, 34, 0.04);
+    border: 1px solid $pto-stroke;
+    border-radius: 10px;
+  }
+
+  &__author {
+    font-family: $type-c;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: $pto-accent;
+    letter-spacing: 0.05em;
+  }
+
+  &__text {
+    font-family: $type-b;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    color: $pto-fg;
+    word-wrap: break-word;
+    overflow-wrap: anywhere;
+  }
+
+  &__time {
+    font-family: $type-c;
+    font-size: 0.65rem;
+    color: $pto-muted;
+    white-space: nowrap;
+  }
+
+  &__delete {
+    grid-column: 1 / -1;
+    justify-self: end;
+    appearance: none;
+    background: transparent;
+    border: none;
+    color: $pto-muted;
+    font-family: $type-c;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    padding: 0;
+    margin-top: 0.15rem;
+
+    &:hover { color: $pto-accent; }
+  }
+
+  &__form {
+    display: flex;
+    gap: 0.4rem;
+    align-items: stretch;
+  }
+
+  &__input {
+    flex: 1;
+    font-family: $type-b;
+    font-size: 0.9rem;
+    color: $pto-fg;
+    background: #fff;
+    border: 1px solid $pto-stroke;
+    border-radius: 999px;
+    padding: 0.5rem 0.9rem;
+
+    &::placeholder { color: $pto-muted; }
+
+    &:focus {
+      outline: none;
+      border-color: $pto-fg;
+    }
+  }
+
+  &__submit {
+    appearance: none;
+    font-family: $type-c;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: $pto-bg;
+    background: $pto-fg;
+    border: none;
+    border-radius: 999px;
+    padding: 0 1.1rem;
+    cursor: pointer;
+    transition: background 0.15s ease;
+
+    &:hover { background: $pto-accent; }
+    &:disabled { opacity: 0.4; cursor: not-allowed; }
+  }
+}
