@@ -1,13 +1,14 @@
 import type { APIRoute } from "astro";
-import { verifySession } from "@/lib/auth";
+import { verifySession, isAdminEmail } from "@/lib/auth";
 import { validateTitle, validateSummary, validateDate } from "@/lib/validation";
 import { putEpisode, getEpisode } from "@/lib/episodes";
 
-function requireAuth(token: string | undefined): boolean {
+function requireAdmin(token: string | undefined): boolean {
   if (!token) return false;
   const secret = import.meta.env.SESSION_SECRET;
   if (!secret) return false;
-  return verifySession(token, secret) !== null;
+  const payload = verifySession(token, secret);
+  return isAdminEmail(payload?.email, import.meta.env.ADMIN_EMAILS);
 }
 
 export const GET: APIRoute = async ({ url }) => {
@@ -21,8 +22,8 @@ export const GET: APIRoute = async ({ url }) => {
 
 export const PUT: APIRoute = async ({ request, cookies }) => {
   const token = cookies.get("pto_session")?.value;
-  if (!requireAuth(token)) {
-    return new Response(JSON.stringify({ error: "No autorizado" }), { status: 401 });
+  if (!requireAdmin(token)) {
+    return new Response(JSON.stringify({ error: "Sólo admins" }), { status: 403 });
   }
 
   const body = (await request.json().catch(() => ({}))) as {

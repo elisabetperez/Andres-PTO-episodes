@@ -5,6 +5,13 @@ export type SessionPayload = {
   email?: string;  // sub identity (Google email)
 };
 
+/** True if `email` is in the comma-separated ADMIN_EMAILS list. */
+export function isAdminEmail(email: string | null | undefined, list: string | undefined): boolean {
+  if (!email || !list) return false;
+  const allowed = list.toLowerCase().split(",").map((s) => s.trim()).filter(Boolean);
+  return allowed.includes(email.toLowerCase());
+}
+
 function b64urlEncode(buf: Buffer | string): string {
   const b = typeof buf === "string" ? Buffer.from(buf, "utf8") : buf;
   return b.toString("base64").replace(/=+$/g, "").replace(/\+/g, "-").replace(/\//g, "_");

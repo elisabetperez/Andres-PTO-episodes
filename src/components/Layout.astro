@@ -1,7 +1,7 @@
 ---
 import "@/assets/sass/style.scss";
 import AuthGate from "@/components/AuthGate.astro";
-import { verifySession } from "@/lib/auth";
+import { verifySession, isAdminEmail } from "@/lib/auth";
 
 type Props = {
   title?: string;
@@ -21,7 +21,9 @@ const {
 
 const token = Astro.cookies.get("pto_session")?.value;
 const secret = import.meta.env.SESSION_SECRET;
-const isAuthed = !!(token && secret && verifySession(token, secret));
+const session = token && secret ? verifySession(token, secret) : null;
+const isAuthed = !!session;
+const isAdmin = isAdminEmail(session?.email, import.meta.env.ADMIN_EMAILS);
 ---
 
 <!doctype html>
@@ -37,7 +39,7 @@ const isAuthed = !!(token && secret && verifySession(token, secret));
     <main class:list={["c--page-a", variant === "hero" && "is-hero"]}>
       <div class="c--page-a__inner">
         <slot />
-        {showFooter && isAuthed && (
+        {showFooter && isAdmin && (
           <a class="c--tab-a" href="/admin">
             <span class="c--tab-a__label">Admin</span>
           </a>

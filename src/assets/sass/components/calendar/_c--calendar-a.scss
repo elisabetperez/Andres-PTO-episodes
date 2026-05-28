@@ -3,7 +3,13 @@
   gap: 0.75rem;
   width: 30rem;
   max-width: 100%;
+  min-width: 0;
   position: relative;
+
+  @media all and ($viewport-type: $tablets) {
+    width: 100%;
+    max-width: 30rem;
+  }
 
   &::after {
     content: attr(data-tooltip);
