@@ -48,8 +48,8 @@
 .c--ep-info-a {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  max-width: 22rem;
+  gap: 0.6rem;
+  max-width: 30rem;
   text-align: left;
 
   @media all and ($viewport-type: $tablets) {
@@ -59,28 +59,32 @@
 
   &__kicker {
     font-family: $type-c;
-    font-size: 0.7rem;
+    font-size: 0.78rem;
     text-transform: uppercase;
-    letter-spacing: 0.3em;
-    color: $pto-muted;
+    letter-spacing: 0.32em;
+    color: $pto-accent;
     margin: 0;
+    font-weight: 600;
   }
 
   &__title {
     font-family: $type-a;
-    font-weight: 600;
-    font-size: clamp(1.5rem, 2.4vw, 1.85rem);
-    line-height: 1.15;
+    font-weight: 700;
+    font-size: clamp(2rem, 3.6vw, 3rem);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
     margin: 0;
     color: $pto-fg;
   }
 
   &__date {
-    font-family: $type-b;
+    font-family: $type-a;
     font-style: italic;
-    font-size: 1rem;
+    font-weight: 500;
+    font-size: clamp(1.1rem, 2vw, 1.45rem);
+    line-height: 1.2;
     color: $pto-accent;
-    margin: 0;
+    margin: 0.15rem 0 0;
   }
 
   &[data-state="empty"] {
@@ -88,5 +92,5 @@
     .c--ep-info-a__date  { color: $pto-muted; }
   }
   &[data-state="loading"] { opacity: 0.6; }
-  &[data-state="error"]   { .c--ep-info-a__title { color: #c00; } }
+  &[data-state="error"]   { .c--ep-info-a__title { color: #ff8888; } }
 }
