@@ -1,12 +1,12 @@
 // PTO-specific design tokens.
-// Paleta Kurobeni — aubergine oscuro + rosa polvo.
+// Paleta invertida: fondo blush, acento marrón oscuro.
 
-$pto-bg:        #281822;            // Kurobeni (aubergine oscuro)
-$pto-fg:        #d4b6bc;            // rosa polvo (texto sobre dark)
-$pto-muted:     rgba(212, 182, 188, 0.55);
-$pto-accent:    #c89098;            // rosa más saturado para énfasis
+$pto-bg:        #e7b4b4;            // Blush (fondo)
+$pto-fg:        #281822;            // Kurobeni (texto principal sobre blush)
+$pto-muted:     rgba(40, 24, 34, 0.55);
+$pto-accent:    #5a2a30;            // marrón oscuro / borgoña para acento
 $pto-coral:     #c45d62;
 $pto-blush:     #e7b4b4;
 $pto-lilac:     #e2d4ea;
 $pto-peach:     #f5d2b8;
-$pto-stroke:    rgba(212, 182, 188, 0.22);
+$pto-stroke:    rgba(40, 24, 34, 0.18);
