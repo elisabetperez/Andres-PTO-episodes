@@ -25,6 +25,6 @@ export function episodeLabel(
   if (n === null) return null;
   const season = getSeasonForDate(date)!;
   const padded = String(n).padStart(2, "0");
-  if (season.id === "pilots") return `Piloto ${padded}`;
+  if (season.id === "pilots") return `Episodio Piloto ${padded}`;
   return `Temporada 1 · Ep ${padded}`;
 }

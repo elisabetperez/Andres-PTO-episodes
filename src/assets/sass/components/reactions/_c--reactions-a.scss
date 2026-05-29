@@ -6,6 +6,7 @@
   margin-top: 0.75rem;
 
   &__chip {
+    position: relative;
     appearance: none;
     display: inline-flex;
     align-items: center;
@@ -23,6 +24,38 @@
     &:hover {
       background: rgba(40, 24, 34, 0.1);
       transform: translateY(-1px);
+    }
+
+    // Hover tooltip with the comma-separated names.
+    &[data-users]::after {
+      content: attr(data-users);
+      position: absolute;
+      bottom: calc(100% + 0.4rem);
+      left: 50%;
+      transform: translateX(-50%);
+      background: $pto-fg;
+      color: $pto-bg;
+      padding: 0.35rem 0.7rem;
+      border-radius: 8px;
+      font-family: $type-c;
+      font-size: 0.65rem;
+      letter-spacing: 0.06em;
+      text-transform: none;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.18s ease 0.15s, transform 0.18s ease 0.15s;
+      z-index: 5;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+    }
+
+    &:hover[data-users]::after {
+      opacity: 1;
+      transform: translateX(-50%) translateY(-0.25rem);
+    }
+
+    @media all and ($viewport-type: $tablets) {
+      &[data-users]::after { display: none; }
     }
 
     &.is-mine {
