@@ -2,6 +2,7 @@
 import "@/assets/sass/style.scss";
 import AuthGate from "@/components/AuthGate.astro";
 import { verifySession, isAdminEmail } from "@/lib/auth";
+import { recordVisit } from "@/lib/audit";
 
 type Props = {
   title?: string;
@@ -24,6 +25,13 @@ const secret = import.meta.env.SESSION_SECRET;
 const session = token && secret ? verifySession(token, secret) : null;
 const isAuthed = !!session;
 const isAdmin = isAdminEmail(session?.email, import.meta.env.ADMIN_EMAILS);
+
+// Fire-and-forget visit audit. Debounced to 5 minutes per email inside the lib.
+if (isAuthed && session?.email && Astro.url.pathname !== "/admin" && !Astro.url.pathname.startsWith("/api/")) {
+  recordVisit({ email: session.email, path: Astro.url.pathname }).catch((err) =>
+    console.error("recordVisit failed:", err)
+  );
+}
 ---
 
 <!doctype html>

@@ -81,12 +81,13 @@ export async function addComment(
 export async function deleteComment(
   date: string,
   id: string,
-  requester: string
+  requester: string,
+  asAdmin = false
 ): Promise<Comment[]> {
   const list = await listComments(date);
   const target = list.find((c) => c.id === id);
   if (!target) return list;
-  if (target.author !== requester) {
+  if (!asAdmin && target.author !== requester) {
     throw new Error("No autorizado para borrar este comentario");
   }
   const updated = list.filter((c) => c.id !== id);

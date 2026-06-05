@@ -3,7 +3,11 @@ import Layout from "@/components/Layout.astro";
 import ShowTitle from "@/components/ShowTitle.astro";
 import { verifySession, isAdminEmail } from "@/lib/auth";
 import { SEASONS, daysInSeason } from "@/config/seasons";
-import { listLogins } from "@/lib/audit";
+import { listLogins, listVisits } from "@/lib/audit";
+import { listEpisodes } from "@/lib/episodes";
+import { getReactions } from "@/lib/reactions";
+import { listComments } from "@/lib/comments";
+import { episodeLabel } from "@/lib/numbering";
 
 const token = Astro.cookies.get("pto_session")?.value;
 const secret = import.meta.env.SESSION_SECRET;
@@ -18,13 +22,46 @@ const today = new Date().toISOString().slice(0, 10);
 const initialDate = allDates.includes(today) ? today : maxDate;
 
 const logins = isAdmin ? await listLogins(40).catch(() => []) : [];
-const uniqueEmails = new Set(logins.map((l) => l.email));
+const visits = isAdmin ? await listVisits(60).catch(() => []) : [];
+const uniqueEmails = new Set([...logins.map((l) => l.email), ...visits.map((v) => v.email)]);
+
+// Aggregate reactions + comments across all episodes for the activity feed.
+type Activity =
+  | { kind: "reaction"; date: string; emoji: string; email: string }
+  | { kind: "comment"; date: string; id: string; author: string; text: string; at: string };
+const activity: Activity[] = [];
+if (isAdmin) {
+  try {
+    const eps = await listEpisodes();
+    const dates = eps.map((e) => e.date);
+    for (const ep of eps) {
+      const [reacts, comms] = await Promise.all([
+        getReactions(ep.date).catch(() => ({})),
+        listComments(ep.date).catch(() => []),
+      ]);
+      for (const [emoji, emails] of Object.entries(reacts)) {
+        for (const email of emails) {
+          activity.push({ kind: "reaction", date: ep.date, emoji, email });
+        }
+      }
+      for (const c of comms) {
+        activity.push({ kind: "comment", date: ep.date, id: c.id, author: c.author, text: c.text, at: c.createdAt });
+      }
+    }
+  } catch (err) {
+    console.error("activity feed failed:", err);
+  }
+}
+
 const fmtWhen = new Intl.DateTimeFormat("es-ES", {
   day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit", timeZone: "Europe/Madrid",
 });
 function nameOnly(email: string): string {
   const at = email.indexOf("@");
   return at >= 0 ? email.slice(0, at) : email;
+}
+function episodeLabelFor(date: string): string {
+  return episodeLabel(date, [date]) ?? date;
 }
 ---
 
@@ -123,11 +160,11 @@ function nameOnly(email: string): string {
         </div>
 
         <aside class="c--admin-a__col">
-          <h2 class="c--admin-a__h2">Accesos</h2>
+          <h2 class="c--admin-a__h2">Logins</h2>
           <p class="c--admin-a__hint">
             {uniqueEmails.size === 0
               ? "Aún nadie ha entrado."
-              : `${uniqueEmails.size} ${uniqueEmails.size === 1 ? "persona" : "personas"} · últimos ${logins.length} eventos:`}
+              : `${uniqueEmails.size} ${uniqueEmails.size === 1 ? "persona" : "personas"} distintas · últimos ${logins.length} logins:`}
           </p>
           {logins.length > 0 && (
             <ul class="c--admin-a__logins">
@@ -136,6 +173,48 @@ function nameOnly(email: string): string {
                   <strong>{nameOnly(ev.email)}</strong>
                   <span class="c--admin-a__email">{ev.email}</span>
                   <span class="c--admin-a__when">{fmtWhen.format(new Date(ev.at))}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+
+          <h2 class="c--admin-a__h2">Visitas</h2>
+          <p class="c--admin-a__hint">
+            {visits.length === 0 ? "Sin visitas registradas todavía." : `Últimas ${visits.length} visitas (debounce 5 min):`}
+          </p>
+          {visits.length > 0 && (
+            <ul class="c--admin-a__logins">
+              {visits.map((v) => (
+                <li>
+                  <strong>{nameOnly(v.email)}</strong>
+                  <span class="c--admin-a__email">{v.path ?? ""}</span>
+                  <span class="c--admin-a__when">{fmtWhen.format(new Date(v.at))}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+
+          <h2 class="c--admin-a__h2">Actividad</h2>
+          <p class="c--admin-a__hint">
+            {activity.length === 0 ? "Sin reacciones ni comentarios." : `${activity.length} eventos:`}
+          </p>
+          {activity.length > 0 && (
+            <ul class="c--admin-a__logins">
+              {activity.map((a) => (
+                <li>
+                  {a.kind === "reaction" ? (
+                    <>
+                      <strong>{a.emoji}</strong>
+                      <span class="c--admin-a__email">{nameOnly(a.email)} en {a.date}</span>
+                      <span class="c--admin-a__when">reacción</span>
+                    </>
+                  ) : (
+                    <>
+                      <strong>{nameOnly(a.author)}</strong>
+                      <span class="c--admin-a__email">"{a.text}" — {a.date}</span>
+                      <span class="c--admin-a__when">{fmtWhen.format(new Date(a.at))}</span>
+                    </>
+                  )}
                 </li>
               ))}
             </ul>

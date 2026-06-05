@@ -211,6 +211,7 @@ const latestDate = latest ? formatDateEs(latest.date) : "";
   const commentsInput = commentsForm.querySelector("input[name='text']") as HTMLInputElement;
 
   type Comment = { id: string; author: string; text: string; createdAt: string };
+  let isAdmin = false;
 
   function fmtTime(iso: string): string {
     const d = new Date(iso);
@@ -233,12 +234,12 @@ const latestDate = latest ? formatDateEs(latest.date) : "";
       time.className = "c--comments-a__time";
       time.textContent = fmtTime(c.createdAt);
       item.append(author, text, time);
-      if (c.author === myEmail) {
+      if (c.author === myEmail || isAdmin) {
         const del = document.createElement("button");
         del.type = "button";
         del.className = "c--comments-a__delete";
         del.dataset.id = c.id;
-        del.textContent = "Borrar";
+        del.textContent = c.author === myEmail ? "Borrar" : "Borrar (admin)";
         item.append(del);
       }
       commentsList.append(item);
@@ -252,8 +253,9 @@ const latestDate = latest ? formatDateEs(latest.date) : "";
     try {
       const r = await fetch(`/api/comments?date=${encodeURIComponent(date)}`);
       if (!r.ok) throw new Error("fetch failed");
-      const data = await r.json() as { comments: Comment[]; me: string };
+      const data = await r.json() as { comments: Comment[]; me: string; isAdmin?: boolean };
       myEmail = data.me;
+      isAdmin = !!data.isAdmin;
       renderComments(data.comments);
     } catch {
       renderComments([]);
@@ -274,8 +276,9 @@ const latestDate = latest ? formatDateEs(latest.date) : "";
         body: JSON.stringify({ date, text }),
       });
       if (r.ok) {
-        const data = await r.json() as { comments: Comment[]; me: string };
+        const data = await r.json() as { comments: Comment[]; me: string; isAdmin?: boolean };
         myEmail = data.me;
+        isAdmin = !!data.isAdmin;
         renderComments(data.comments);
         commentsInput.value = "";
       }
@@ -294,7 +297,8 @@ const latestDate = latest ? formatDateEs(latest.date) : "";
       method: "DELETE",
     });
     if (r.ok) {
-      const data = await r.json() as { comments: Comment[]; me: string };
+      const data = await r.json() as { comments: Comment[]; me: string; isAdmin?: boolean };
+      isAdmin = !!data.isAdmin;
       renderComments(data.comments);
     }
   });
