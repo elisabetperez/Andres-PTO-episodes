@@ -37,12 +37,15 @@ const isAdmin = isAdminEmail(session?.email, import.meta.env.ADMIN_EMAILS);
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={new URL("/og-image.svg", Astro.url).toString()} />
+    <meta property="og:image" content={new URL("/og-image.png", Astro.url).toString()} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta property="og:url" content={Astro.url.toString()} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={new URL("/og-image.svg", Astro.url).toString()} />
+    <meta name="twitter:image" content={new URL("/og-image.png", Astro.url).toString()} />
   </head>
   <body class:list={[!isAuthed && "is-gated"]} data-theme={initialTheme}>
     <main class:list={["c--page-a", variant === "hero" && "is-hero"]}>
