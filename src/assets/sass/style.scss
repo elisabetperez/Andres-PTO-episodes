@@ -1,3 +1,16 @@
+// Expose PTO design tokens as CSS custom properties for inline-style usage.
+:root {
+  --pto-bg:     #{$pto-bg};
+  --pto-fg:     #{$pto-fg};
+  --pto-muted:  #{$pto-muted};
+  --pto-accent: #{$pto-accent};
+  --pto-coral:  #{$pto-coral};
+  --pto-blush:  #{$pto-blush};
+  --pto-lilac:  #{$pto-lilac};
+  --pto-peach:  #{$pto-peach};
+  --pto-cream:  #{$pto-cream};
+}
+
 // Foundation (reset, grid, spacing, font, color, background)
 @import "./framework/foundation/foundation";
 

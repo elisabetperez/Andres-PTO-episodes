@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <defs>
+    <symbol id="face" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="50"/>
+      <circle cx="34" cy="42" r="6" fill="#281822"/>
+      <circle cx="66" cy="42" r="6" fill="#281822"/>
+      <path d="M 30 60 Q 50 78 70 60" stroke="#281822" stroke-width="5" fill="none" stroke-linecap="round"/>
+    </symbol>
+  </defs>
+
+  <rect width="1200" height="630" fill="#ffffff"/>
+
+  <!-- top row of smileys (left-aligned) -->
+  <g transform="translate(40, 60)">
+    <use href="#face" x="0"   y="0" width="130" height="130" fill="#e7b4b4"/>
+    <use href="#face" x="155" y="0" width="130" height="130" fill="#f5d2b8"/>
+    <use href="#face" x="310" y="0" width="130" height="130" fill="#e2d4ea"/>
+    <use href="#face" x="465" y="0" width="130" height="130" fill="#f78bd8"/>
+    <use href="#face" x="620" y="0" width="130" height="130" fill="#c45d62"/>
+    <use href="#face" x="775" y="0" width="130" height="130" fill="#f3ead5" stroke="#281822" stroke-width="1.5"/>
+    <use href="#face" x="930" y="0" width="130" height="130" fill="#f5d2b8"/>
+  </g>
+
+  <!-- central dark pill -->
+  <g transform="translate(160, 230)">
+    <rect x="0" y="0" width="880" height="180" rx="90" ry="90" fill="#281822"/>
+    <text x="440" y="64" text-anchor="middle"
+          font-family="JetBrains Mono, ui-monospace, monospace"
+          font-size="16" letter-spacing="5"
+          fill="#f78bd8" font-weight="700">EL OOO DE ANDRÉS</text>
+    <text x="440" y="118" text-anchor="middle"
+          font-family="Georgia, serif"
+          font-size="44" font-weight="700"
+          fill="#ffffff">The One Where Andrés No Está</text>
+    <text x="440" y="156" text-anchor="middle"
+          font-family="Georgia, serif"
+          font-style="italic" font-size="20"
+          fill="#f78bd8">una sitcom diaria al estilo de Friends</text>
+  </g>
+
+  <!-- bottom row of smileys (right-aligned) -->
+  <g transform="translate(40, 440)">
+    <use href="#face" x="155" y="0" width="130" height="130" fill="#c45d62"/>
+    <use href="#face" x="310" y="0" width="130" height="130" fill="#e7b4b4"/>
+    <use href="#face" x="465" y="0" width="130" height="130" fill="#f78bd8"/>
+    <use href="#face" x="620" y="0" width="130" height="130" fill="#f3ead5" stroke="#281822" stroke-width="1.5"/>
+    <use href="#face" x="775" y="0" width="130" height="130" fill="#e2d4ea"/>
+    <use href="#face" x="930" y="0" width="130" height="130" fill="#f5d2b8"/>
+    <use href="#face" x="1085" y="0" width="35" height="130" fill="#f78bd8" preserveAspectRatio="xMinYMid meet"/>
+  </g>
+</svg>
