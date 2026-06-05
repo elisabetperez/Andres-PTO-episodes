@@ -2,7 +2,7 @@ import type { APIRoute } from "astro";
 import { signSession } from "@/lib/auth";
 import { recordLogin } from "@/lib/audit";
 
-const SESSION_TTL_MS = 24 * 60 * 60 * 1000;
+const SESSION_TTL_MS = 60 * 24 * 60 * 60 * 1000; // 60 días
 const STATE_COOKIE = "pto_oauth_state";
 
 type TokenResponse = {
