@@ -24,7 +24,7 @@ const MONTHS_ES = [
   "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
   "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre",
 ];
-const DOW_ES = ["L", "M", "X", "J", "V", "S", "D"];
+const DOW_ES = ["L", "M", "X", "J", "V"]; // sólo días laborables
 
 // All months covered by seasons.
 const allMonthsSet = new Set<string>();
@@ -46,11 +46,17 @@ function buildMonth(ym: string) {
   const [y, m] = ym.split("-").map(Number);
   const first = new Date(Date.UTC(y, m - 1, 1));
   const last = new Date(Date.UTC(y, m, 0));
-  const startOffset = (first.getUTCDay() + 6) % 7;
+  // Monday-first offset in a 5-col weekday grid. Sat/Sun roll over to the next Monday.
+  const firstWeekday = first.getUTCDay(); // 0=Sun, 1=Mon...6=Sat
+  let startOffset = 0;
+  if (firstWeekday >= 1 && firstWeekday <= 5) startOffset = firstWeekday - 1;
   type Status = "outside-month" | "outside-season" | "future" | "empty" | "filled";
   const cells: Array<{ date: string | null; status: Status; isToday: boolean }> = [];
   for (let i = 0; i < startOffset; i++) cells.push({ date: null, status: "outside-month", isToday: false });
   for (let d = 1; d <= last.getUTCDate(); d++) {
+    const dt = new Date(Date.UTC(y, m - 1, d));
+    const dow = dt.getUTCDay();
+    if (dow === 0 || dow === 6) continue; // skip weekends
     const iso = `${y}-${String(m).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
     let status: Status;
     if (iso > today) status = "future";

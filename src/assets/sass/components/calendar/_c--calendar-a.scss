@@ -102,7 +102,7 @@
 
   &__dow {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     font-family: $type-c;
     font-size: 0.65rem;
     text-transform: uppercase;
@@ -114,7 +114,7 @@
 
   &__grid {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 8px;
   }
 
